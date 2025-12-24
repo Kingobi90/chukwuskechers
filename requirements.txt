@@ -1,0 +1,11 @@
+pandas
+openpyxl
+sqlalchemy
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+opencv-python
+pyzbar
+pillow
+pytesseract

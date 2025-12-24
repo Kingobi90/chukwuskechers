@@ -1,0 +1,2788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Management System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab.active {
+            background: white;
+            color: #2c2c2c;
+            border-bottom: 3px solid #2c2c2c;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #2c2c2c;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2c2c2c;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: #2c2c2c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a1a1a;
+        }
+
+        .btn-success {
+            background: #4a4a4a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2c2c2c;
+        }
+
+        .btn-danger {
+            background: #666666;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #4a4a4a;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #e8e8e8;
+            color: #2c2c2c;
+            border: 1px solid #cccccc;
+        }
+
+        .alert-error {
+            background: #d9d9d9;
+            color: #1a1a1a;
+            border: 1px solid #b3b3b3;
+        }
+
+        .alert-info {
+            background: #f0f0f0;
+            color: #2c2c2c;
+            border: 1px solid #d9d9d9;
+        }
+
+        .list-item {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: #f8f9fa;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .list-item-info {
+            flex: 1;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        .badge-primary {
+            background: #2c2c2c;
+            color: white;
+        }
+
+        .badge-success {
+            background: #4a4a4a;
+            color: white;
+        }
+
+        .badge-info {
+            background: #666666;
+            color: white;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+        }
+
+        .location-tree {
+            margin-top: 20px;
+        }
+
+        .room-section {
+            margin-bottom: 20px;
+            border: 2px solid #2c2c2c;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .room-header {
+            background: #2c2c2c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .shelf-section {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            border-left: 3px solid #4a4a4a;
+            padding-left: 15px;
+        }
+
+        .shelf-header {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .row-section {
+            margin-left: 20px;
+            padding: 8px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Visual Shelf Styles */
+        .visual-warehouse {
+            padding: 20px;
+        }
+
+        .visual-room {
+            margin-bottom: 40px;
+            border: 3px solid #2c2c2c;
+            border-radius: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f0f0 0%, #d9d9d9 100%);
+        }
+
+        .visual-room-header {
+            background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .visual-shelf {
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .visual-shelf-header {
+            background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .visual-row {
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .visual-row-header {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .item-card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: #2c2c2c;
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+        }
+
+        .item-card-style {
+            font-weight: bold;
+            color: #2c2c2c;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .item-card-color {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 4px;
+        }
+
+        .item-card-division {
+            font-size: 11px;
+            color: #adb5bd;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 20px;
+            color: #adb5bd;
+            font-style: italic;
+        }
+
+        /* Item Profile Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 1;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .profile-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+
+        .profile-info {
+            display: grid;
+            gap: 15px;
+        }
+
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .profile-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .profile-value {
+            color: #2c2c2c;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            opacity: 0.9;
+        }
+
+        .item-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+        }
+
+        .item-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .item-style {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .item-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .detail-item {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        /* Analytics Styles */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+
+        .chart-container-large {
+            position: relative;
+            height: 500px;
+            margin: 20px 0;
+        }
+
+        .file-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .file-card {
+            border: 2px solid #2c2c2c;
+            border-radius: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+
+        .file-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .file-header {
+            background: #2c2c2c;
+            color: white;
+            padding: 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .file-header h4 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .file-date {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #2c2c2c;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a4a4a 0%, #2c2c2c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            transition: width 0.3s;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            padding: 20px;
+            border-left: 3px solid #2c2c2c;
+            margin-left: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 25px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #2c2c2c;
+            border: 3px solid white;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: #2c2c2c;
+            margin-bottom: 10px;
+        }
+
+        .division-breakdown {
+            margin-top: 15px;
+        }
+
+        .division-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Warehouse Management System</h1>
+            <p>Complete inventory and location management</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('upload')">Upload Excel</button>
+            <button class="tab" onclick="switchTab('seasonal')">Seasonal Drop</button>
+            <button class="tab" onclick="switchTab('visual-shelves')">Visual Shelves</button>
+            <button class="tab" onclick="switchTab('locations')">Manage Locations</button>
+            <button class="tab" onclick="switchTab('search')">Search & Place Items</button>
+            <button class="tab" onclick="switchTab('inventory')">View Inventory</button>
+            <button class="tab" onclick="switchTab('stats')">Statistics</button>
+            <button class="tab" onclick="switchTab('analytics')">Excel Analytics</button>
+        </div>
+
+        <div class="content">
+            <!-- Upload Excel Tab -->
+            <div id="upload-tab" class="tab-content active">
+                <div class="card">
+                    <h3>Upload Excel File</h3>
+                    <div id="upload-alert"></div>
+                    <div class="form-group">
+                        <label>Select Excel File (.xlsx, .xls)</label>
+                        <input type="file" id="excel-file" accept=".xlsx,.xls">
+                    </div>
+                    <button class="btn btn-primary" onclick="uploadExcel()">Upload & Parse</button>
+                </div>
+
+                <div class="card">
+                    <h3>Uploaded Files</h3>
+                    <div id="files-list"></div>
+                </div>
+            </div>
+
+            <!-- Visual Shelves Tab -->
+            <div id="visual-shelves-tab" class="tab-content">
+                <div class="card">
+                    <h3>Visual Warehouse Layout</h3>
+                    <p>View your warehouse shelves with all placed items. Click any item to see its profile.</p>
+                    <button class="btn btn-primary" onclick="loadVisualShelves()">Load Warehouse</button>
+                </div>
+                <div id="visual-warehouse-container"></div>
+            </div>
+
+            <!-- Seasonal Drop Tab -->
+            <div id="seasonal-tab" class="tab-content">
+                <div class="card">
+                    <h3>Seasonal Drop Management</h3>
+                    <p>Upload your seasonal Excel sheet. All styles NOT in the file will be automatically marked as "dropped" and you'll get an organized report of their warehouse locations.</p>
+                    
+                    <div class="form-group">
+                        <label>Season Name</label>
+                        <input type="text" id="season-name" placeholder="e.g., Spring 2025">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Seasonal Excel File</label>
+                        <input type="file" id="seasonal-file-input" accept=".xlsx,.xls">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="uploadSeasonalSheet()">Process Seasonal Drop</button>
+                    <div id="seasonal-alert"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Dropped Items Report</h3>
+                    <p>View and export all items currently marked as "dropped" organized by warehouse location.</p>
+
+                    <button class="btn btn-secondary" onclick="viewDroppedReport()">View Report</button>
+                    <button class="btn btn-success" onclick="exportDroppedReport()">Export to File</button>
+                    
+                    <div id="dropped-report" style="margin-top: 20px;"></div>
+                </div>
+            </div>
+
+            <!-- Locations Tab -->
+            <div id="locations-tab" class="tab-content">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Create Room</h3>
+                        <div class="form-group">
+                            <label>Room Name</label>
+                            <input type="text" id="room-name" placeholder="e.g., Warehouse A">
+                        </div>
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <input type="text" id="room-desc" placeholder="e.g., Main storage area">
+                        </div>
+                        <button class="btn btn-success" onclick="createRoom()">Create Room</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Create Shelf</h3>
+                        <div class="form-group">
+                            <label>Select Room</label>
+                            <select id="shelf-room-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Shelf Name</label>
+                            <input type="text" id="shelf-name" placeholder="e.g., Shelf 1">
+                        </div>
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <input type="text" id="shelf-desc" placeholder="e.g., Top shelf">
+                        </div>
+                        <button class="btn btn-success" onclick="createShelf()">Create Shelf</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Create Row</h3>
+                        <div class="form-group">
+                            <label>Select Shelf</label>
+                            <select id="row-shelf-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Row Name</label>
+                            <input type="text" id="row-name" placeholder="e.g., Row A">
+                        </div>
+                        <div class="form-group">
+                            <label>Description (optional)</label>
+                            <input type="text" id="row-desc" placeholder="e.g., Left side">
+                        </div>
+                        <button class="btn btn-success" onclick="createRow()">Create Row</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Warehouse Structure</h3>
+                    <button class="btn btn-secondary" onclick="loadLocations()">Refresh</button>
+                    <div id="locations-tree"></div>
+                </div>
+            </div>
+
+            <!-- Search & Place Items Tab -->
+            <div id="search-tab" class="tab-content">
+                <div class="card">
+                    <h3>Search Items</h3>
+                    <div class="search-box">
+                        <input type="text" id="search-style" placeholder="Style number">
+                        <input type="text" id="search-color" placeholder="Color">
+                        <button class="btn btn-primary" onclick="searchItems()">Search</button>
+                    </div>
+                    <div id="search-results"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Barcode Scanner</h3>
+                    <p>Scan barcodes or QR codes to quickly search for items. Upload an image or use your camera.</p>
+
+                    <div class="form-group">
+                        <label>Upload Barcode Image</label>
+                        <input type="file" id="barcode-file-input" accept="image/*" capture="environment">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="scanBarcodeImage()">Scan Barcode</button>
+                    <div id="scanner-alert"></div>
+                    <div id="scanner-results"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Skechers Tag Scanner (OCR)</h3>
+                    <p>Scan Skechers product tags to extract style number and color code.</p>
+
+                    <div style="margin-bottom: 15px;">
+                        <button class="btn btn-primary" onclick="startCameraScanner()" id="start-camera-btn">Start Live Camera</button>
+                        <button class="btn btn-secondary" onclick="stopCameraScanner()" id="stop-camera-btn" style="display: none;">Stop Camera</button>
+                    </div>
+
+                    <div id="camera-container" style="display: none; margin-bottom: 15px;">
+                        <video id="camera-video" autoplay playsinline style="width: 100%; max-width: 640px; border-radius: 10px; border: 3px solid #667eea;"></video>
+                        <canvas id="camera-canvas" style="display: none;"></canvas>
+                        <div id="scan-status" style="margin-top: 10px; padding: 15px; background: #f8f9fa; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 18px; font-weight: bold; color: #667eea;">Scanning...</div>
+                            <div id="scan-progress" style="margin-top: 5px; font-size: 14px; color: #6c757d;">Position tag in camera view</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Or Upload Tag Image</label>
+                        <input type="file" id="tag-file-input" accept="image/*" capture="environment">
+                        <button class="btn btn-success" onclick="scanTagImage()" style="margin-top: 10px;">Scan Uploaded Image</button>
+                    </div>
+                    
+                    <div id="tag-scanner-alert"></div>
+                    <div id="tag-scanner-results"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Assign Item to Location</h3>
+                    <div class="form-group">
+                        <label>Style Number</label>
+                        <input type="text" id="assign-style-number" placeholder="Enter style number (e.g., 100702)" onchange="loadColorsForStyle()">
+                    </div>
+                    <div class="form-group" id="assign-color-group" style="display: none;">
+                        <label>Select Color</label>
+                        <select id="assign-color-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Location (Row)</label>
+                        <select id="assign-row-select"></select>
+                    </div>
+                    <button class="btn btn-success" onclick="assignItemLocation()">Assign Location</button>
+                    <button class="btn btn-secondary" onclick="unassignItemLocation()">Remove Location</button>
+                </div>
+            </div>
+
+            <!-- Inventory Tab -->
+            <div id="inventory-tab" class="tab-content">
+                <div class="card">
+                    <h3>Inventory Items</h3>
+                    <div class="form-group">
+                        <label>Filter by Status</label>
+                        <select id="status-filter" onchange="loadInventory()">
+                            <option value="all">All Items</option>
+                            <option value="pending">Pending</option>
+                            <option value="placed">Placed</option>
+                            <option value="showroom">Showroom</option>
+                            <option value="waitlist">Waitlist</option>
+                            <option value="dropped">Dropped</option>
+                        </select>
+                    </div>
+                    <div id="inventory-list"></div>
+                </div>
+            </div>
+
+            <!-- Statistics Tab -->
+            <div id="stats-tab" class="tab-content">
+                <div class="card">
+                    <h3>Database Statistics</h3>
+                    <button class="btn btn-secondary" onclick="loadStats()">Refresh Stats</button>
+                    <div id="stats-content"></div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics-tab" class="tab-content">
+                <div class="card">
+                    <h3>Excel Files Analytics Dashboard</h3>
+                    <p>Comprehensive comparison and trend analysis across all uploaded files</p>
+                    <button class="btn btn-primary" onclick="loadAllAnalytics()">Refresh All Data</button>
+                </div>
+
+                <!-- Overview Section -->
+                <div class="card">
+                    <h3>Overview</h3>
+                    <div id="overview-stats"></div>
+                </div>
+
+                <!-- Timeline Trends -->
+                <div class="card">
+                    <h3>Timeline & Trends</h3>
+                    <div id="timeline-content"></div>
+                    <div class="chart-container-large">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- File Comparison -->
+                <div class="card">
+                    <h3>File-by-File Comparison</h3>
+                    <div id="file-comparison"></div>
+                </div>
+
+                <!-- Division Trends -->
+                <div class="card">
+                    <h3>Division Trends Across Files</h3>
+                    <div class="chart-container-large">
+                        <canvas id="divisionTrendsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Overlap Analysis -->
+                <div class="card">
+                    <h3>File Overlap Analysis</h3>
+                    <div id="overlap-content"></div>
+                </div>
+
+                <!-- Placement Analytics -->
+                <div class="card">
+                    <h3>Placement Analytics</h3>
+                    <div class="chart-container">
+                        <canvas id="placementChart"></canvas>
+                    </div>
+                    <div id="placement-details"></div>
+                </div>
+
+                <!-- Style Family Analysis -->
+                <div class="card">
+                    <h3>Style Family Analysis</h3>
+                    <p>Grouped by first 3 digits of style numbers (e.g., 180, 181, 182 are in the same family)</p>
+                    <div id="style-family-summary"></div>
+                    <div class="chart-container-large">
+                        <canvas id="styleFamilyChart"></canvas>
+                    </div>
+                    <div id="style-family-details"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Profile Modal -->
+    <div id="item-profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Item Profile</h2>
+                <button class="modal-close" onclick="closeItemProfile()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Profile content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            if (tabName === 'locations') {
+                loadLocations();
+                loadRoomsForSelects();
+                loadShelvesForSelects();
+                loadRowsForSelects();
+            } else if (tabName === 'upload') {
+                loadUploadedFiles();
+            } else if (tabName === 'search') {
+                loadRowsForSelects();
+            } else if (tabName === 'inventory') {
+                loadInventory();
+            } else if (tabName === 'stats') {
+                loadStats();
+            }
+        }
+
+        function showAlert(elementId, message, type) {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => alertDiv.innerHTML = '', 5000);
+        }
+
+        async function uploadExcel() {
+            const fileInput = document.getElementById('excel-file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showAlert('upload-alert', 'Please select a file', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                showAlert('upload-alert', 'Uploading and parsing...', 'info');
+                const response = await fetch(`${API_BASE}/upload-excel?upload_images=true`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showAlert('upload-alert', 
+                        `Success! Processed ${result.styles_processed} styles, ${result.items_saved} items`, 
+                        'success');
+                    loadUploadedFiles();
+                    fileInput.value = '';
+                } else {
+                    showAlert('upload-alert', `Error: ${result.detail}`, 'error');
+                }
+            } catch (error) {
+                showAlert('upload-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadUploadedFiles() {
+            try {
+                const response = await fetch(`${API_BASE}/inventory/files`);
+                const files = await response.json();
+                
+                const filesList = document.getElementById('files-list');
+                if (files.length === 0) {
+                    filesList.innerHTML = '<p>No files uploaded yet</p>';
+                    return;
+                }
+
+                filesList.innerHTML = files.map(f => `
+                    <div class="list-item">
+                        <div class="list-item-info">
+                            <strong>${f.filename}</strong>
+                            <span class="badge badge-${f.status === 'completed' ? 'success' : 'info'}">${f.status}</span>
+                            <br>
+                            <small>Styles: ${f.styles_count} | Items: ${f.items_count} | Uploaded: ${new Date(f.uploaded_at).toLocaleString()}</small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-danger" onclick="deleteFile('${f.filename}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading files:', error);
+            }
+        }
+
+        async function deleteFile(filename) {
+            if (!confirm(`Delete file "${filename}" and all associated data?\n\nThis will remove:\n- Items that only exist in this file\n- Update items that exist in multiple files\n- Delete associated actions\n\nThis action cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/inventory/file/${encodeURIComponent(filename)}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`File deleted successfully!\n\nItems deleted: ${result.items_deleted}\nItems updated: ${result.items_updated}\nStyles deleted: ${result.styles_deleted}\nActions deleted: ${result.actions_deleted}`);
+                    loadUploadedFiles();
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.detail}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function createRoom() {
+            const name = document.getElementById('room-name').value;
+            const description = document.getElementById('room-desc').value;
+
+            if (!name) {
+                alert('Please enter a room name');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/locations/rooms`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({name, description})
+                });
+
+                if (response.ok) {
+                    alert('Room created successfully!');
+                    document.getElementById('room-name').value = '';
+                    document.getElementById('room-desc').value = '';
+                    loadLocations();
+                    loadRoomsForSelects();
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.detail}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function createShelf() {
+            const roomId = document.getElementById('shelf-room-select').value;
+            const name = document.getElementById('shelf-name').value;
+            const description = document.getElementById('shelf-desc').value;
+
+            if (!roomId || !name) {
+                alert('Please select a room and enter a shelf name');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/locations/shelves`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({room_id: parseInt(roomId), name, description})
+                });
+
+                if (response.ok) {
+                    alert('Shelf created successfully!');
+                    document.getElementById('shelf-name').value = '';
+                    document.getElementById('shelf-desc').value = '';
+                    loadLocations();
+                    loadShelvesForSelects();
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.detail}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function createRow() {
+            const shelfId = document.getElementById('row-shelf-select').value;
+            const name = document.getElementById('row-name').value;
+            const description = document.getElementById('row-desc').value;
+
+            if (!shelfId || !name) {
+                alert('Please select a shelf and enter a row name');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/locations/rows`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({shelf_id: parseInt(shelfId), name, description})
+                });
+
+                if (response.ok) {
+                    alert('Row created successfully!');
+                    document.getElementById('row-name').value = '';
+                    document.getElementById('row-desc').value = '';
+                    loadLocations();
+                    loadRowsForSelects();
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.detail}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function loadRoomsForSelects() {
+            try {
+                const response = await fetch(`${API_BASE}/locations/rooms`);
+                const rooms = await response.json();
+                
+                const select = document.getElementById('shelf-room-select');
+                select.innerHTML = '<option value="">Select a room</option>' + 
+                    rooms.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+            } catch (error) {
+                console.error('Error loading rooms:', error);
+            }
+        }
+
+        async function loadShelvesForSelects() {
+            try {
+                const response = await fetch(`${API_BASE}/locations/shelves`);
+                const shelves = await response.json();
+                
+                const select = document.getElementById('row-shelf-select');
+                select.innerHTML = '<option value="">Select a shelf</option>' + 
+                    shelves.map(s => `<option value="${s.id}">${s.room_name} - ${s.name}</option>`).join('');
+            } catch (error) {
+                console.error('Error loading shelves:', error);
+            }
+        }
+
+        async function loadRowsForSelects() {
+            try {
+                const response = await fetch(`${API_BASE}/locations/rows`);
+                const rows = await response.json();
+                
+                const selects = ['assign-row-select'];
+                selects.forEach(selectId => {
+                    const select = document.getElementById(selectId);
+                    if (select) {
+                        select.innerHTML = '<option value="">Select a row</option>' + 
+                            rows.map(r => `<option value="${r.id}">${r.room_name} > ${r.shelf_name} > ${r.name}</option>`).join('');
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading rows:', error);
+            }
+        }
+
+        async function loadLocations() {
+            const treeDiv = document.getElementById('locations-tree');
+            treeDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+
+            try {
+                const roomsResponse = await fetch(`${API_BASE}/locations/rooms`);
+                const rooms = await roomsResponse.json();
+
+                if (rooms.length === 0) {
+                    treeDiv.innerHTML = '<p>No rooms created yet. Create your first room above!</p>';
+                    return;
+                }
+
+                let html = '<div class="location-tree">';
+                
+                for (const room of rooms) {
+                    html += `
+                        <div class="room-section">
+                            <div class="room-header">
+                                <span><strong>${room.name}</strong> ${room.description ? `- ${room.description}` : ''}</span>
+                                <button class="btn btn-danger" onclick="deleteRoom(${room.id}, '${room.name}')">Delete</button>
+                            </div>
+                    `;
+
+                    const shelvesResponse = await fetch(`${API_BASE}/locations/shelves?room_id=${room.id}`);
+                    const shelves = await shelvesResponse.json();
+
+                    if (shelves.length === 0) {
+                        html += '<p style="margin-left: 20px; color: #6c757d;">No shelves in this room</p>';
+                    }
+
+                    for (const shelf of shelves) {
+                        html += `
+                            <div class="shelf-section">
+                                <div class="shelf-header">
+                                    <span><strong>${shelf.name}</strong> ${shelf.description ? `- ${shelf.description}` : ''}</span>
+                                    <button class="btn btn-danger" onclick="deleteShelf(${shelf.id}, '${shelf.name}')">Delete</button>
+                                </div>
+                        `;
+
+                        const rowsResponse = await fetch(`${API_BASE}/locations/rows?shelf_id=${shelf.id}`);
+                        const rows = await rowsResponse.json();
+
+                        if (rows.length === 0) {
+                            html += '<p style="margin-left: 20px; color: #6c757d;">No rows on this shelf</p>';
+                        }
+
+                        for (const row of rows) {
+                            html += `
+                                <div class="row-section">
+                                    <span><strong>${row.name}</strong> ${row.description ? `- ${row.description}` : ''} <span class="badge badge-info">${row.item_count} items</span></span>
+                                    <button class="btn btn-danger" onclick="deleteRow(${row.id}, '${row.name}')">Delete</button>
+                                </div>
+                            `;
+                        }
+
+                        html += '</div>';
+                    }
+
+                    html += '</div>';
+                }
+
+                html += '</div>';
+                treeDiv.innerHTML = html;
+            } catch (error) {
+                treeDiv.innerHTML = `<p class="alert alert-error">Error loading locations: ${error.message}</p>`;
+            }
+        }
+
+        async function deleteRoom(id, name) {
+            if (!confirm(`Delete room "${name}" and all its shelves and rows?`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/locations/rooms/${id}`, {method: 'DELETE'});
+                if (response.ok) {
+                    alert('Room deleted');
+                    loadLocations();
+                    loadRoomsForSelects();
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function deleteShelf(id, name) {
+            if (!confirm(`Delete shelf "${name}" and all its rows?`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/locations/shelves/${id}`, {method: 'DELETE'});
+                if (response.ok) {
+                    alert('Shelf deleted');
+                    loadLocations();
+                    loadShelvesForSelects();
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function deleteRow(id, name) {
+            if (!confirm(`Delete row "${name}"? Items will be unassigned.`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/locations/rows/${id}`, {method: 'DELETE'});
+                if (response.ok) {
+                    alert('Row deleted');
+                    loadLocations();
+                    loadRowsForSelects();
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function searchItems() {
+            const style = document.getElementById('search-style').value;
+            const color = document.getElementById('search-color').value;
+
+            if (!style && !color) {
+                alert('Please enter a style or color to search');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('search-results');
+            resultsDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
+
+            try {
+                const params = new URLSearchParams();
+                if (style) params.append('style', style);
+                if (color) params.append('color', color);
+
+                const response = await fetch(`${API_BASE}/items/search?${params}`);
+                const items = await response.json();
+                
+                console.log('Search results:', items);
+                console.log('First item image_url:', items[0]?.image_url);
+
+                if (items.length === 0) {
+                    resultsDiv.innerHTML = '<p>No items found</p>';
+                    return;
+                }
+
+                resultsDiv.innerHTML = items.map(item => `
+                    <div class="item-card">
+                        <div style="display: grid; grid-template-columns: ${item.image_url ? '150px 1fr' : '1fr'}; gap: 15px;">
+                            ${item.image_url ? `
+                                <div style="text-align: center;">
+                                    <img src="${item.image_url}" 
+                                         alt="${item.style} - ${item.color}" 
+                                         style="width: 100%; max-width: 150px; height: auto; border-radius: 8px; border: 2px solid #dee2e6;"
+                                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23f8f9fa%22 width=%22150%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236c757d%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                                </div>
+                            ` : ''}
+                            <div>
+                                <div class="item-header">
+                                    <span class="item-style">Style: ${item.style}</span>
+                                    <span class="badge badge-${item.status === 'pending' ? 'info' : 'success'}">${item.status}</span>
+                                </div>
+                                <div class="item-details">
+                                    <div class="detail-item"><span class="detail-label">ID:</span> ${item.id}</div>
+                                    <div class="detail-item"><span class="detail-label">Color:</span> ${item.color}</div>
+                                    <div class="detail-item"><span class="detail-label">Division:</span> ${item.division || 'N/A'}</div>
+                                    <div class="detail-item"><span class="detail-label">Gender:</span> ${item.gender || 'N/A'}</div>
+                                    <div class="detail-item"><span class="detail-label">Outsole:</span> ${item.outsole || 'N/A'}</div>
+                                </div>
+                                ${item.location ? `
+                                    <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px;">
+                                        <strong>Location:</strong> ${item.location.room} > ${item.location.shelf} > ${item.location.row}
+                                    </div>
+                                ` : '<div style="margin-top: 10px; color: #6c757d;">No location assigned</div>'}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="alert alert-error">Error: ${error.message}</p>`;
+            }
+        }
+
+        async function loadColorsForStyle() {
+            const styleNumber = document.getElementById('assign-style-number').value.trim();
+            const colorGroup = document.getElementById('assign-color-group');
+            const colorSelect = document.getElementById('assign-color-select');
+
+            if (!styleNumber) {
+                colorGroup.style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/scan/${styleNumber}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    colorSelect.innerHTML = '<option value="">Select a color...</option>' + 
+                        data.colors.map(c => `<option value="${c.color}">${c.color} (${c.width})</option>`).join('');
+                    colorGroup.style.display = 'block';
+                } else {
+                    colorGroup.style.display = 'none';
+                    alert('Style not found');
+                }
+            } catch (error) {
+                colorGroup.style.display = 'none';
+                alert(`Error loading colors: ${error.message}`);
+            }
+        }
+
+        async function assignItemLocation() {
+            const styleNumber = document.getElementById('assign-style-number').value.trim();
+            const color = document.getElementById('assign-color-select').value;
+            const rowId = document.getElementById('assign-row-select').value;
+
+            if (!styleNumber || !color || !rowId) {
+                alert('Please enter a style number, select a color, and select a row');
+                return;
+            }
+
+            const itemId = `${styleNumber.padStart(6, '0')}_${color}`;
+
+            try {
+                const response = await fetch(`${API_BASE}/items/${encodeURIComponent(itemId)}/location`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({row_id: parseInt(rowId)})
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`Item ${result.style} - ${result.color} placed in ${result.location.room} > ${result.location.shelf} > ${result.location.row}\n\nStatus updated to: ${result.status}`);
+                    document.getElementById('assign-style-number').value = '';
+                    document.getElementById('assign-color-select').value = '';
+                    document.getElementById('assign-color-group').style.display = 'none';
+                    searchItems();
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.detail}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function unassignItemLocation() {
+            const styleNumber = document.getElementById('assign-style-number').value.trim();
+            const color = document.getElementById('assign-color-select').value;
+
+            if (!styleNumber || !color) {
+                alert('Please enter a style number and select a color');
+                return;
+            }
+
+            const itemId = `${styleNumber.padStart(6, '0')}_${color}`;
+
+            try {
+                const response = await fetch(`${API_BASE}/items/${encodeURIComponent(itemId)}/location`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({row_id: null})
+                });
+
+                if (response.ok) {
+                    alert('Location removed from item');
+                    document.getElementById('assign-style-number').value = '';
+                    document.getElementById('assign-color-select').value = '';
+                    document.getElementById('assign-color-group').style.display = 'none';
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.detail}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function loadInventory() {
+            const status = document.getElementById('status-filter').value;
+            const listDiv = document.getElementById('inventory-list');
+            listDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Loading inventory...</div>';
+
+            try {
+                let url = `${API_BASE}/inventory/pending?limit=100`;
+                if (status !== 'all' && status !== 'pending') {
+                    url = `${API_BASE}/inventory/by-action/${status}?limit=100`;
+                } else if (status === 'all') {
+                    url = `${API_BASE}/inventory/search?limit=100`;
+                }
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.items.length === 0) {
+                    listDiv.innerHTML = '<p>No items found</p>';
+                    return;
+                }
+
+                const itemsWithLocation = await Promise.all(
+                    data.items.map(async item => {
+                        if (item.status === 'placed') {
+                            const searchResponse = await fetch(`${API_BASE}/items/search?style=${item.style}&color=${encodeURIComponent(item.color)}&limit=1`);
+                            const searchResults = await searchResponse.json();
+                            if (searchResults.length > 0) {
+                                return searchResults[0];
+                            }
+                        }
+                        return item;
+                    })
+                );
+
+                listDiv.innerHTML = `
+                    <p><strong>Total: ${data.total} items</strong> (showing ${data.items.length})</p>
+                    ${itemsWithLocation.map(item => `
+                        <div class="item-card">
+                            <div style="display: grid; grid-template-columns: ${item.image_url ? '150px 1fr' : '1fr'}; gap: 15px;">
+                                ${item.image_url ? `
+                                    <div style="text-align: center;">
+                                        <img src="${item.image_url}" 
+                                             alt="${item.style} - ${item.color}" 
+                                             style="width: 100%; max-width: 150px; height: auto; border-radius: 8px; border: 2px solid #dee2e6;"
+                                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23f8f9fa%22 width=%22150%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236c757d%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                                    </div>
+                                ` : ''}
+                                <div>
+                                    <div class="item-header">
+                                        <span class="item-style">Style: ${item.style}</span>
+                                        <span class="badge badge-${item.status === 'pending' ? 'info' : item.status === 'placed' ? 'success' : 'primary'}">${item.status}</span>
+                                    </div>
+                                    <div class="item-details">
+                                        <div class="detail-item"><span class="detail-label">ID:</span> ${item.id}</div>
+                                        <div class="detail-item"><span class="detail-label">Color:</span> ${item.color}</div>
+                                        <div class="detail-item"><span class="detail-label">Division:</span> ${item.division || 'N/A'}</div>
+                                        <div class="detail-item"><span class="detail-label">Gender:</span> ${item.gender || 'N/A'}</div>
+                                        <div class="detail-item"><span class="detail-label">Outsole:</span> ${item.outsole || 'N/A'}</div>
+                                        <div class="detail-item"><span class="detail-label">Sources:</span> ${item.source_files ? item.source_files.length : 'N/A'}</div>
+                                    </div>
+                                    ${item.location ? `
+                                        <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px;">
+                                            <strong>Warehouse Location</strong><br>
+                                            <div style="margin-top: 8px; font-size: 1.1em;">
+                                                ${item.location.room} > ${item.location.shelf} > ${item.location.row}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            } catch (error) {
+                listDiv.innerHTML = `<p class="alert alert-error">Error: ${error.message}</p>`;
+            }
+        }
+
+        async function loadStats() {
+            const statsDiv = document.getElementById('stats-content');
+            statsDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Loading statistics...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/inventory/stats`);
+                const stats = await response.json();
+
+                statsDiv.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>${stats.total_styles}</h4>
+                            <p>Total Styles</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>${stats.total_items}</h4>
+                            <p>Total Items</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>${stats.total_files_processed}</h4>
+                            <p>Files Processed</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>By Status</h3>
+                        ${Object.entries(stats.by_action).map(([action, count]) => `
+                            <div class="list-item">
+                                <span><strong>${action}</strong></span>
+                                <span class="badge badge-primary">${count}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="grid">
+                        <div class="card">
+                            <h3>By Division</h3>
+                            ${Object.entries(stats.by_division).map(([div, count]) => `
+                                <div class="list-item" style="cursor: pointer;" onclick="showDivisionItems('${div}')">
+                                    <span>${div}</span>
+                                    <span class="badge badge-info">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="card">
+                            <h3>By Gender</h3>
+                            ${Object.entries(stats.by_gender).map(([gender, count]) => `
+                                <div class="list-item">
+                                    <span>${gender}</span>
+                                    <span class="badge badge-info">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="card">
+                            <h3>By Width</h3>
+                            ${Object.entries(stats.by_width).map(([width, count]) => `
+                                <div class="list-item">
+                                    <span>${width}</span>
+                                    <span class="badge badge-info">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                statsDiv.innerHTML = `<p class="alert alert-error">Error: ${error.message}</p>`;
+            }
+        }
+
+        async function showDivisionItems(division) {
+            try {
+                const response = await fetch(`${API_BASE}/inventory/items?division=${encodeURIComponent(division)}`);
+                const items = await response.json();
+
+                const modalBody = document.getElementById('modal-body');
+                const modalTitle = document.getElementById('modal-title');
+                
+                modalTitle.textContent = `${division} - ${items.length} Items`;
+                
+                modalBody.innerHTML = `
+                    <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
+                        ${items.map(item => `
+                            <div class="item-card" onclick="showItemProfile('${item.id}')">
+                                ${item.image_url ? `<img src="${item.image_url}" alt="${item.style}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">` : ''}
+                                <div style="font-weight: bold; color: #2c2c2c; margin-bottom: 5px;">${item.style}</div>
+                                <div style="font-size: 0.9em; color: #6c757d;">${item.color}</div>
+                                <div style="font-size: 0.85em; color: #999; margin-top: 5px;">${item.gender || 'N/A'}</div>
+                                ${item.location ? `<div style="font-size: 0.8em; color: #4a4a4a; margin-top: 5px;">${item.location.room} > ${item.location.shelf} > ${item.location.row}</div>` : '<div style="font-size: 0.8em; color: #999; margin-top: 5px;">No location</div>'}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                document.getElementById('item-profile-modal').style.display = 'flex';
+            } catch (error) {
+                alert('Error loading division items: ' + error.message);
+            }
+        }
+
+        async function uploadSeasonalSheet() {
+            const seasonName = document.getElementById('season-name').value.trim();
+            const fileInput = document.getElementById('seasonal-file-input');
+            const file = fileInput.files[0];
+            const alertDiv = document.getElementById('seasonal-alert');
+
+            if (!seasonName) {
+                showAlert('seasonal-alert', 'Please enter a season name', 'error');
+                return;
+            }
+
+            if (!file) {
+                showAlert('seasonal-alert', 'Please select a file', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                showAlert('seasonal-alert', 'Processing seasonal drop...', 'info');
+                const response = await fetch(`${API_BASE}/seasonal-drop?season_name=${encodeURIComponent(seasonName)}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showAlert('seasonal-alert',
+                        `Seasonal drop complete!\n\n` +
+                        `Season: ${result.season_name}\n` +
+                        `Active Styles: ${result.active_styles_count}\n` +
+                        `Items Dropped: ${result.dropped_count}\n` +
+                        `  - With Location: ${result.dropped_with_location}\n` +
+                        `  - Without Location: ${result.dropped_without_location}`,
+                        'success');
+                    
+                    document.getElementById('season-name').value = '';
+                    fileInput.value = '';
+                    
+                    // Show the report
+                    displayDroppedReport(result);
+                } else {
+                    showAlert('seasonal-alert', `Error: ${result.detail}`, 'error');
+                }
+            } catch (error) {
+                showAlert('seasonal-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function viewDroppedReport() {
+            const reportDiv = document.getElementById('dropped-report');
+            reportDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Loading report...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/dropped-items/report`);
+                const data = await response.json();
+                
+                displayDroppedReport(data);
+            } catch (error) {
+                reportDiv.innerHTML = `<p class="alert alert-error">Error: ${error.message}</p>`;
+            }
+        }
+
+        function displayDroppedReport(data) {
+            const reportDiv = document.getElementById('dropped-report');
+            
+            if (data.total_dropped === 0) {
+                reportDiv.innerHTML = '<p class="alert alert-info">No dropped items found</p>';
+                return;
+            }
+
+            let html = `
+                <div class="card">
+                    <h4>Summary</h4>
+                    <p><strong>Total Dropped Items:</strong> ${data.total_dropped || data.dropped_count}</p>
+                    <p><strong>With Location:</strong> ${data.with_location || data.dropped_with_location}</p>
+                    <p><strong>Without Location:</strong> ${data.without_location || data.dropped_without_location}</p>
+                </div>
+            `;
+
+            const itemsByLocation = data.items_by_location || {};
+            if (Object.keys(itemsByLocation).length > 0) {
+                html += '<div class="card"><h4>Items by Warehouse Location</h4>';
+                
+                for (const [location, items] of Object.entries(itemsByLocation).sort()) {
+                    html += `
+                        <div style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <strong>${location}</strong> (${items.length} items)
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                ${items.map(item => `
+                                    <li>${item.style} - ${item.color} (${item.division}, ${item.gender})</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+                html += '</div>';
+            }
+
+            const itemsWithoutLocation = data.items_without_location || [];
+            if (itemsWithoutLocation.length > 0) {
+                html += `
+                    <div class="card">
+                        <h4>Items Without Location (${itemsWithoutLocation.length})</h4>
+                        <ul style="padding-left: 20px;">
+                            ${itemsWithoutLocation.map(item => `
+                                <li>${item.style} - ${item.color} (${item.division}, ${item.gender})</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            reportDiv.innerHTML = html;
+        }
+
+        function exportDroppedReport() {
+            window.open(`${API_BASE}/dropped-items/export`, '_blank');
+        }
+
+        async function loadVisualShelves() {
+            const container = document.getElementById('visual-warehouse-container');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading warehouse layout...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/warehouse/visual-layout`);
+                const data = await response.json();
+                
+                if (!data.warehouse_layout || data.warehouse_layout.length === 0) {
+                    container.innerHTML = '<div class="card"><p class="alert alert-info">No warehouse locations found. Create rooms, shelves, and rows first.</p></div>';
+                    return;
+                }
+
+                let html = '<div class="visual-warehouse">';
+                
+                for (const room of data.warehouse_layout) {
+                    html += `
+                        <div class="visual-room">
+                            <div class="visual-room-header">
+                                ${room.name}
+                                ${room.description ? `<div style="font-size: 14px; font-weight: normal; margin-top: 5px;">${room.description}</div>` : ''}
+                            </div>
+                    `;
+                    
+                    if (room.shelves.length === 0) {
+                        html += '<p class="empty-row">No shelves in this room</p>';
+                    } else {
+                        for (const shelf of room.shelves) {
+                            html += `
+                                <div class="visual-shelf">
+                                    <div class="visual-shelf-header">
+                                        ${shelf.name}
+                                        ${shelf.description ? `<span style="font-size: 14px; font-weight: normal; margin-left: 10px;">(${shelf.description})</span>` : ''}
+                                    </div>
+                            `;
+                            
+                            if (shelf.rows.length === 0) {
+                                html += '<p class="empty-row">No rows in this shelf</p>';
+                            } else {
+                                for (const row of shelf.rows) {
+                                    html += `
+                                        <div class="visual-row">
+                                            <div class="visual-row-header">
+                                                <span>${row.name}</span>
+                                                <span class="badge badge-info">${row.item_count} items</span>
+                                            </div>
+                                    `;
+                                    
+                                    if (row.items.length === 0) {
+                                        html += '<p class="empty-row">Empty row</p>';
+                                    } else {
+                                        html += '<div class="items-grid">';
+                                        for (const item of row.items) {
+                                            const imageUrl = item.image_url || '/static/images/placeholder.jpg';
+                                            html += `
+                                                <div class="item-card" onclick="showItemProfile('${item.id}')">
+                                                    <img src="${imageUrl}" alt="${item.style}" onerror="this.src='/static/images/placeholder.jpg'">
+                                                    <div class="item-card-style">${item.style}</div>
+                                                    <div class="item-card-color">${item.color}</div>
+                                                    <div class="item-card-division">${item.division || ''}</div>
+                                                </div>
+                                            `;
+                                        }
+                                        html += '</div>';
+                                    }
+                                    
+                                    html += '</div>';
+                                }
+                            }
+                            
+                            html += '</div>';
+                        }
+                    }
+                    
+                    html += '</div>';
+                }
+                
+                html += '</div>';
+                container.innerHTML = html;
+                
+            } catch (error) {
+                container.innerHTML = `<div class="card"><p class="alert alert-error">Error loading warehouse: ${error.message}</p></div>`;
+            }
+        }
+
+        async function showItemProfile(itemId) {
+            const modal = document.getElementById('item-profile-modal');
+            const modalBody = document.getElementById('modal-body');
+            
+            modalBody.innerHTML = '<div class="loading"><div class="spinner"></div>Loading profile...</div>';
+            modal.classList.add('active');
+            
+            try {
+                const response = await fetch(`${API_BASE}/items/${encodeURIComponent(itemId)}/profile`);
+                const item = await response.json();
+                
+                const imageUrl = item.image_url || '/static/images/placeholder.jpg';
+                
+                let html = `
+                    <img src="${imageUrl}" alt="${item.style}" class="profile-image" onerror="this.src='/static/images/placeholder.jpg'">
+                    <div class="profile-info">
+                        <div class="profile-field">
+                            <span class="profile-label">Style Number:</span>
+                            <span class="profile-value">${item.style}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Color:</span>
+                            <span class="profile-value">${item.color}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Division:</span>
+                            <span class="profile-value">${item.division || 'N/A'}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Outsole:</span>
+                            <span class="profile-value">${item.outsole || 'N/A'}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Gender:</span>
+                            <span class="profile-value">${item.gender || 'N/A'}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="profile-label">Status:</span>
+                            <span class="profile-value">${item.status}</span>
+                        </div>
+                `;
+                
+                if (item.location) {
+                    html += `
+                        <div class="profile-field">
+                            <span class="profile-label">Location:</span>
+                            <span class="profile-value">${item.location.room} > ${item.location.shelf} > ${item.location.row}</span>
+                        </div>
+                    `;
+                }
+                
+                if (item.source_files && item.source_files.length > 0) {
+                    html += `
+                        <div class="profile-field">
+                            <span class="profile-label">Source Files:</span>
+                            <span class="profile-value">${item.source_files.join(', ')}</span>
+                        </div>
+                    `;
+                }
+                
+                html += '</div>';
+                modalBody.innerHTML = html;
+                
+            } catch (error) {
+                modalBody.innerHTML = `<p class="alert alert-error">Error loading profile: ${error.message}</p>`;
+            }
+        }
+
+        function closeItemProfile() {
+            const modal = document.getElementById('item-profile-modal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('item-profile-modal');
+            if (event.target === modal) {
+                closeItemProfile();
+            }
+        }
+
+        async function scanBarcodeImage() {
+            const fileInput = document.getElementById('barcode-file-input');
+            const file = fileInput.files[0];
+            const alertDiv = document.getElementById('scanner-alert');
+            const resultsDiv = document.getElementById('scanner-results');
+
+            if (!file) {
+                showAlert('scanner-alert', 'Please select an image file', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                showAlert('scanner-alert', 'Scanning barcode...', 'info');
+                resultsDiv.innerHTML = '';
+
+                const response = await fetch(`${API_BASE}/scan-barcode`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    showAlert('scanner-alert', result.message, 'error');
+                    return;
+                }
+
+                showAlert('scanner-alert', result.message, 'success');
+
+                // Display barcode results
+                let html = '<div class="card" style="margin-top: 15px;"><h4>Scanned Barcodes</h4>';
+                
+                for (const barcode of result.barcodes) {
+                    html += `
+                        <div style="padding: 15px; margin: 10px 0; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <div><strong>Type:</strong> ${barcode.type}</div>
+                            <div><strong>Raw Data:</strong> ${barcode.raw_data}</div>
+                            <div><strong>Style Number:</strong> <span style="color: #667eea; font-weight: bold;">${barcode.style_number}</span></div>
+                            <button class="btn btn-primary" style="margin-top: 10px;" onclick="searchByStyleNumber('${barcode.style_number}')">
+                                Search This Style
+                            </button>
+                        </div>
+                    `;
+                }
+                
+                html += '</div>';
+                resultsDiv.innerHTML = html;
+
+                // Clear file input
+                fileInput.value = '';
+
+            } catch (error) {
+                showAlert('scanner-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function searchByStyleNumber(styleNumber) {
+            // Fill search field and trigger search
+            document.getElementById('search-style').value = styleNumber;
+            await searchItems();
+            
+            // Scroll to search results
+            document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function scanTagImage() {
+            const fileInput = document.getElementById('tag-file-input');
+            const file = fileInput.files[0];
+            const alertDiv = document.getElementById('tag-scanner-alert');
+            const resultsDiv = document.getElementById('tag-scanner-results');
+
+            if (!file) {
+                showAlert('tag-scanner-alert', 'Please select a tag image', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                showAlert('tag-scanner-alert', 'Scanning tag with OCR...', 'info');
+                resultsDiv.innerHTML = '';
+
+                const response = await fetch(`${API_BASE}/scan-tag`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    showAlert('tag-scanner-alert', result.message, 'error');
+                    if (result.raw_text) {
+                        resultsDiv.innerHTML = `<div class="card" style="margin-top: 15px;"><h4>Raw OCR Text</h4><pre style="white-space: pre-wrap; font-size: 12px;">${result.raw_text}</pre></div>`;
+                    }
+                    return;
+                }
+
+                showAlert('tag-scanner-alert', 'Tag scanned successfully', 'success');
+
+                // Display tag scan results
+                const styleText = result.style_number ? 'Style: ' + result.style_number : 'Style not detected';
+                const colorText = result.color_code ? result.color_code + ' - ' + result.color_name : 'Color not detected';
+
+                let html = '<div class="card" style="margin-top: 15px;">';
+                html += '<h4>Tag Information</h4>';
+                html += '<div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white; margin-bottom: 15px;">';
+                html += '<div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">';
+                html += styleText;
+                html += '</div>';
+                html += '<div style="font-size: 18px;">';
+                html += colorText;
+                html += '</div>';
+                html += '</div>';
+
+                if (result.style_number) {
+                    html += '<button class="btn btn-primary" style="margin-right: 10px;" onclick="searchByStyleNumber(\'' + result.style_number + '\')">';
+                    html += 'Search Style ' + result.style_number;
+                    html += '</button>';
+                }
+
+                if (result.style_number && result.color_code) {
+                    html += '<button class="btn btn-success" onclick="searchByStyleAndColor(\'' + result.style_number + '\', \'' + result.color_code + '\')">';
+                    html += 'Search ' + result.style_number + ' - ' + result.color_code;
+                    html += '</button>';
+                }
+
+                if (result.raw_text) {
+                    html += '<details style="margin-top: 15px;">';
+                    html += '<summary style="cursor: pointer; color: #667eea; font-weight: 600;">Show Raw OCR Text</summary>';
+                    html += '<pre style="white-space: pre-wrap; font-size: 12px; margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px;">' + result.raw_text + '</pre>';
+                    html += '</details>';
+                }
+
+                html += '</div>';
+                resultsDiv.innerHTML = html;
+
+                // Clear file input
+                fileInput.value = '';
+
+            } catch (error) {
+                showAlert('tag-scanner-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function searchByStyleAndColor(styleNumber, colorCode) {
+            // Fill search fields and trigger search
+            document.getElementById('search-style').value = styleNumber;
+            document.getElementById('search-color').value = colorCode;
+            await searchItems();
+            
+            // Scroll to search results
+            document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Camera scanner variables
+        let cameraStream = null;
+        let scanningInterval = null;
+        let lastScannedResult = null;
+
+        async function startCameraScanner() {
+            const video = document.getElementById('camera-video');
+            const container = document.getElementById('camera-container');
+            const startBtn = document.getElementById('start-camera-btn');
+            const stopBtn = document.getElementById('stop-camera-btn');
+
+            try {
+                // Request camera access
+                const constraints = {
+                    video: {
+                        facingMode: 'environment', // Use back camera on mobile
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                };
+
+                cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = cameraStream;
+
+                // Show camera container
+                container.style.display = 'block';
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'inline-block';
+
+                showAlert('tag-scanner-alert', 'Camera started - Position tag in view', 'info');
+
+                // Start continuous scanning
+                scanningInterval = setInterval(() => {
+                    captureAndScanFrame();
+                }, 2000); // Scan every 2 seconds
+
+            } catch (error) {
+                showAlert('tag-scanner-alert', `Camera access denied: ${error.message}`, 'error');
+            }
+        }
+
+        function stopCameraScanner() {
+            const video = document.getElementById('camera-video');
+            const container = document.getElementById('camera-container');
+            const startBtn = document.getElementById('start-camera-btn');
+            const stopBtn = document.getElementById('stop-camera-btn');
+
+            // Stop camera stream
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+
+            // Stop scanning interval
+            if (scanningInterval) {
+                clearInterval(scanningInterval);
+                scanningInterval = null;
+            }
+
+            // Hide camera container
+            container.style.display = 'none';
+            startBtn.style.display = 'inline-block';
+            stopBtn.style.display = 'none';
+
+            video.srcObject = null;
+            lastScannedResult = null;
+
+            showAlert('tag-scanner-alert', 'Camera stopped', 'info');
+        }
+
+        async function captureAndScanFrame() {
+            const video = document.getElementById('camera-video');
+            const canvas = document.getElementById('camera-canvas');
+            const context = canvas.getContext('2d');
+
+            // Set canvas size to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw current video frame to canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert canvas to blob
+            canvas.toBlob(async (blob) => {
+                if (!blob) return;
+
+                const formData = new FormData();
+                formData.append('file', blob, 'camera-frame.jpg');
+
+                try {
+                    const response = await fetch(`${API_BASE}/scan-tag`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success && result.style_number) {
+                        // Check if this is a new result (avoid duplicate alerts)
+                        const resultKey = `${result.style_number}_${result.color_code}`;
+                        if (resultKey !== lastScannedResult) {
+                            lastScannedResult = resultKey;
+
+                            // Show success alert
+                            showAlert('tag-scanner-alert', `Detected: ${result.style_number} - ${result.color_code || 'Unknown'}`, 'success');
+
+                            // Display results
+                            displayCameraScanResult(result);
+
+                            // Optional: Auto-stop camera after successful scan
+                            // stopCameraScanner();
+                        }
+                    }
+                } catch (error) {
+                    // Silently fail during continuous scanning to avoid spam
+                    console.error('Scan error:', error);
+                }
+            }, 'image/jpeg', 0.8);
+        }
+
+        function displayCameraScanResult(result) {
+            const resultsDiv = document.getElementById('tag-scanner-results');
+
+            const styleNumber = result.style_number || 'Unknown';
+            const colorDisplay = result.color_code ? (result.color_code + ' - ' + result.color_name) : 'Color not detected';
+
+            let html = '<div class="card" style="margin-top: 15px; border: 3px solid #28a745; animation: slideUp 0.3s;">';
+            html += '<h4>Tag Detected!</h4>';
+            html += '<div style="padding: 20px; background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%); border-radius: 10px; color: white; margin-bottom: 15px;">';
+            html += '<div style="font-size: 28px; font-weight: bold; margin-bottom: 10px;">';
+            html += 'Style: ' + styleNumber;
+            html += '</div>';
+            html += '<div style="font-size: 20px;">';
+            html += colorDisplay;
+            html += '</div>';
+            html += '</div>';
+            html += '<div style="padding: 10px; background: #e7f5ff; border-radius: 5px; margin-bottom: 15px;">';
+            html += '<strong>Searching inventory automatically...</strong>';
+            html += '</div>';
+            html += '</div>';
+
+            resultsDiv.innerHTML = html;
+        }
+
+        // Load initial data
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUploadedFiles();
+        });
+
+        // Stop camera when leaving the page
+        window.addEventListener('beforeunload', () => {
+            if (cameraStream) {
+                stopCameraScanner();
+            }
+        });
+
+        // Analytics Functions
+        let charts = {};
+
+        async function loadAllAnalytics() {
+            showAnalyticsLoading();
+            await Promise.all([
+                loadOverview(),
+                loadTimeline(),
+                loadFileComparison(),
+                loadDivisionTrends(),
+                loadOverlapAnalysis(),
+                loadPlacementAnalytics()
+            ]);
+        }
+
+        function showAnalyticsLoading() {
+            const sections = ['overview-stats', 'timeline-content', 'file-comparison', 'overlap-content', 'placement-details', 'style-family-details'];
+            sections.forEach(id => {
+                const elem = document.getElementById(id);
+                if (elem) elem.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+            });
+        }
+
+        async function loadOverview() {
+            try {
+                const response = await fetch(`${API_BASE}/analytics/files/comparison`);
+                const data = await response.json();
+
+                const totalItems = data.files.reduce((sum, f) => sum + f.total_items, 0);
+                const totalStyles = data.files.reduce((sum, f) => sum + f.unique_styles, 0);
+                const uniqueItems = data.files.reduce((sum, f) => sum + f.unique_items, 0);
+                const sharedItems = data.files.reduce((sum, f) => sum + f.shared_items, 0);
+
+                document.getElementById('overview-stats').innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>${data.total_files}</h4>
+                            <p>Total Files</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>${totalItems}</h4>
+                            <p>Total Items</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>${totalStyles}</h4>
+                            <p>Unique Styles</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>${uniqueItems}</h4>
+                            <p>File-Unique Items</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>${sharedItems}</h4>
+                            <p>Shared Items</p>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading overview:', error);
+            }
+        }
+
+        async function loadTimeline() {
+            try {
+                const response = await fetch(`${API_BASE}/analytics/trends/timeline`);
+                const data = await response.json();
+
+                const timelineHTML = `
+                    <div class="timeline">
+                        ${data.timeline.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-date">
+                                    ${item.file_date ? new Date(item.file_date).toLocaleDateString() : 'Date unknown'} - ${item.filename}
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Items in file:</span>
+                                    <span class="metric-value">${item.items_in_file}</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">New items (not in previous files):</span>
+                                    <span class="metric-value">${item.new_items}</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">New styles:</span>
+                                    <span class="metric-value">${item.new_styles}</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Cumulative unique items:</span>
+                                    <span class="metric-value">${item.cumulative_items}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                document.getElementById('timeline-content').innerHTML = timelineHTML;
+
+                if (charts.timeline) charts.timeline.destroy();
+                const ctx = document.getElementById('timelineChart').getContext('2d');
+                charts.timeline = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.timeline.map(t => t.file_date ? new Date(t.file_date).toLocaleDateString() : t.filename.substring(0, 15)),
+                        datasets: [
+                            {
+                                label: 'Cumulative Unique Items',
+                                data: data.timeline.map(t => t.cumulative_items),
+                                borderColor: '#2c2c2c',
+                                backgroundColor: 'rgba(44, 44, 44, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: 'New Items per File',
+                                data: data.timeline.map(t => t.new_items),
+                                borderColor: '#666666',
+                                backgroundColor: 'rgba(102, 102, 102, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Item Growth Over Time'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading timeline:', error);
+            }
+        }
+
+        async function loadFileComparison() {
+            try {
+                const response = await fetch(`${API_BASE}/analytics/files/comparison`);
+                const data = await response.json();
+
+                const html = data.files.map(file => `
+                    <div class="file-card">
+                        <div class="file-header">
+                            <h4>${file.filename}</h4>
+                            <div class="file-date">
+                                ${file.file_date ? new Date(file.file_date).toLocaleDateString() : ''}
+                                | Uploaded: ${new Date(file.uploaded_at).toLocaleDateString()}
+                            </div>
+                        </div>
+                        
+                        <div class="metric">
+                            <span class="metric-label">Total Items:</span>
+                            <span class="metric-value">${file.total_items}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Unique to this file:</span>
+                            <span class="metric-value">${file.unique_items}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Shared with other files:</span>
+                            <span class="metric-value">${file.shared_items}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Unique Styles:</span>
+                            <span class="metric-value">${file.unique_styles}</span>
+                        </div>
+
+                        <h3 style="margin-top: 15px; font-size: 1em; color: #495057;">Divisions:</h3>
+                        <div class="division-breakdown">
+                            ${Object.entries(file.divisions).map(([div, count]) => `
+                                <div class="division-item">
+                                    <span>${div}</span>
+                                    <span class="badge badge-info">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <h3 style="margin-top: 15px; font-size: 1em; color: #495057;">Status:</h3>
+                        <div>
+                            ${Object.entries(file.statuses).map(([status, count]) => `
+                                <span class="badge badge-${status === 'placed' ? 'success' : 'primary'}">${status}: ${count}</span>
+                            `).join('')}
+                        </div>
+
+                        <h3 style="margin-top: 15px; font-size: 1em; color: #495057;">Widths:</h3>
+                        <div>
+                            ${Object.entries(file.widths).map(([width, count]) => `
+                                <span class="badge badge-info">${width}: ${count}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('file-comparison').innerHTML = `<div class="file-comparison">${html}</div>`;
+            } catch (error) {
+                console.error('Error loading file comparison:', error);
+            }
+        }
+
+        async function loadDivisionTrends() {
+            try {
+                const response = await fetch(`${API_BASE}/analytics/division/trends`);
+                const data = await response.json();
+
+                const divisions = data.all_divisions;
+                const colors = ['#2c2c2c', '#4a4a4a', '#666666', '#808080', '#999999', '#b3b3b3', '#cccccc'];
+
+                const datasets = divisions.map((division, index) => ({
+                    label: division,
+                    data: data.trends.map(t => t.divisions[division] || 0),
+                    borderColor: colors[index % colors.length],
+                    backgroundColor: colors[index % colors.length] + '20',
+                    tension: 0.4
+                }));
+
+                if (charts.divisionTrends) charts.divisionTrends.destroy();
+                const ctx = document.getElementById('divisionTrendsChart').getContext('2d');
+                charts.divisionTrends = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.trends.map(t => t.file_date ? new Date(t.file_date).toLocaleDateString() : t.filename.substring(0, 15)),
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Division Distribution Across Files'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                stacked: false
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading division trends:', error);
+            }
+        }
+
+        async function loadOverlapAnalysis() {
+            try {
+                const response = await fetch(`${API_BASE}/analytics/comparison/overlap`);
+                const data = await response.json();
+
+                if (data.overlaps.length === 0) {
+                    document.getElementById('overlap-content').innerHTML = '<p>Need at least 2 files for overlap analysis</p>';
+                    return;
+                }
+
+                const tableHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>File 1</th>
+                                <th>File 2</th>
+                                <th>Shared Items</th>
+                                <th>File 1 Unique</th>
+                                <th>File 2 Unique</th>
+                                <th>Overlap %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.overlaps.map(overlap => `
+                                <tr>
+                                    <td>${overlap.file1}</td>
+                                    <td>${overlap.file2}</td>
+                                    <td><strong>${overlap.shared_items}</strong></td>
+                                    <td>${overlap.file1_unique}</td>
+                                    <td>${overlap.file2_unique}</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: ${overlap.overlap_percentage}%">
+                                                ${overlap.overlap_percentage}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                document.getElementById('overlap-content').innerHTML = tableHTML;
+            } catch (error) {
+                console.error('Error loading overlap analysis:', error);
+            }
+        }
+
+        async function loadPlacementAnalytics() {
+            try {
+                const response = await fetch(`${API_BASE}/analytics/placement/analytics`);
+                const data = await response.json();
+
+                if (charts.placement) charts.placement.destroy();
+                const ctx = document.getElementById('placementChart').getContext('2d');
+                charts.placement = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.placement_analytics.map(f => f.filename.substring(0, 20)),
+                        datasets: [
+                            {
+                                label: 'Placed',
+                                data: data.placement_analytics.map(f => f.placed),
+                                backgroundColor: '#10b981'
+                            },
+                            {
+                                label: 'Pending',
+                                data: data.placement_analytics.map(f => f.pending),
+                                backgroundColor: '#f59e0b'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Placement Status by File'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                const detailsHTML = `
+                    <h3>Placement Rates</h3>
+                    <div class="file-comparison">
+                        ${data.placement_analytics.map(file => `
+                            <div class="file-card">
+                                <div class="file-header">
+                                    <h4>${file.filename}</h4>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Total Items:</span>
+                                    <span class="metric-value">${file.total_items}</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Placed:</span>
+                                    <span class="metric-value">${file.placed}</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Placement Rate:</span>
+                                    <span class="metric-value">${file.placement_rate}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${file.placement_rate}%">
+                                        ${file.placement_rate}%
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                document.getElementById('placement-details').innerHTML = detailsHTML;
+            } catch (error) {
+                console.error('Error loading placement analytics:', error);
+            }
+        }
+    </script>
+</body>
+</html>

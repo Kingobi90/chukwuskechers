@@ -1,0 +1,601 @@
+INFO:     Started server process [43017]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60304 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60300 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60300 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60300 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60366 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60366 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60366 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60395 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60435 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60578 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60580 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60581 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60583 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60583 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60583 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60583 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60583 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60593 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60601 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60604 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60601 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60607 - "GET /static/analytics.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60607 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60622 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60627 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60628 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60630 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60643 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60630 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60627 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60628 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60607 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60622 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60627 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60659 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60858 - "GET /static/analytics.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60858 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60859 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60864 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60865 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60866 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60869 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60864 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60864 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60864 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60866 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60869 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60865 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60866 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60866 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60866 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60866 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60882 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60882 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "POST /scan-tag HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60882 - "GET /items/search?style=%24%7Bresult.style_number%7D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61088 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61088 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61088 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61089 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61097 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61088 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61097 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61097 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61097 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61097 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61097 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61097 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /inventory/search?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /items/search?style=100702&color=BBK&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /items/search?style=100702&color=CCL&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /items/search?style=100702&color=TPE&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/100615_WINE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61295 - "GET /static/images/100615_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61291 - "GET /static/images/100636_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61300 - "GET /static/images/100641_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/100636_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61301 - "GET /static/images/100687_CSNT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/100702_CCL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/100721_OFWT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/100702_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61300 - "GET /static/images/100721_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61294 - "GET /static/images/100702_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61295 - "GET /static/images/100726_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61300 - "GET /static/images/100736_BBK%20%28w%29.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/100743_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61301 - "GET /static/images/100736_BBK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/100736_NVY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61299 - "GET /static/images/100743_TPE.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/100743_CCL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/100758_WHT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/100762_TPE.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/100764_BBK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61299 - "GET /static/images/100774_GRY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/100822_BLU.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/100822_NVY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/100822_SAGE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61294 - "GET /static/images/100826_TPE.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/100852_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/100903_CSNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61301 - "GET /static/images/100894_CSNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/104411_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61301 - "GET /static/images/100918_BBK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/104289_WSL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104424_BKRG.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61300 - "GET /static/images/104421_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61294 - "GET /static/images/104437_GRY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61299 - "GET /static/images/104437_BKPK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104437_NVY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104437_BBK%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61301 - "GET /static/images/104450_BBK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/104437_NVY%20%28w%29.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104457_TPE.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61299 - "GET /static/images/104457_BBK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104458_BKW.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104466_WSL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104466_BBK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/104457_CHOC.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104494_BKW.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/104479_LAV.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/104512_BKW.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104479_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61300 - "GET /static/images/104494_NVY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104512_NAT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/104512_WGY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104512_LAV%20%28w%29.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104514_TPE.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104514_WSL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104514_BBK.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61299 - "GET /static/images/104532_BKGY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61295 - "GET /static/images/104532_TPGD.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61295 - "GET /static/images/104532_WSL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61291 - "GET /static/images/104547_BKTQ.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104547_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61300 - "GET /static/images/104546_WINE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/104547_BRN.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104547_LAV.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104547_RED.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/104547_NVY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104547_OLV.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104547_WSL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104548_GYBL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104549_WSL%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/104548_NVPR.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61295 - "GET /static/images/104549_WSL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104552_ROS.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104556_BLSH.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61300 - "GET /static/images/104556_BRN.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/104556_BKNT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104556_CSNT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104556_NVY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104556_SLT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104556_TPE.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104557_CHAR.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104556_SLT%20%28w%29.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61299 - "GET /static/images/104557_BKNT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104557_LTBL.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61295 - "GET /static/images/104557_OWGR.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104558_BKNT.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104557_BKNT%20%28w%29.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61299 - "GET /static/images/104557_CHAR%20%28w%29.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104557_PLUM.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104558_NAT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61295 - "GET /static/images/104557_OWGR%20%28w%29.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61301 - "GET /static/images/104558_WGY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104574_WBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61299 - "GET /static/images/104571_CHOC.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104559_NVRD.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61295 - "GET /static/images/104594_BLSH.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61294 - "GET /static/images/104594_BKW.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61291 - "GET /static/images/104594_NVY.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61300 - "GET /static/images/104594_STN.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61428 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61431 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61432 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61434 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61431 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61431 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61431 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61431 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61431 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61485 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61486 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61485 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61500 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61503 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61504 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61506 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61506 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61506 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61506 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61518 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61518 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61518 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61518 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61524 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61524 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61524 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61560 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61582 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61560 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /inventory/search?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61560 - "GET /items/search?style=100702&color=CCL&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /items/search?style=100702&color=BBK&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61582 - "GET /items/search?style=100702&color=TPE&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61582 - "GET /inventory/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61581 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61560 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61582 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61584 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61590 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61597 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61641 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61641 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62024 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62024 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62024 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62140 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62162 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62160 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62162 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62163 - "GET /warehouse/visual-layout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62162 - "GET /static/images/100702_CCL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62163 - "GET /static/images/100702_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62160 - "GET /static/images/100702_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62412 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62413 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62412 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62412 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62412 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62412 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62424 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62424 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62424 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62424 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62443 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62434 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62424 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62434 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62434 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62434 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62434 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62434 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62445 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62457 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62445 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62457 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62457 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62457 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62457 - "GET /warehouse/visual-layout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62457 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62457 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62457 - "GET /warehouse/visual-layout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63407 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63407 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63407 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63407 - "GET /warehouse/visual-layout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63407 - "GET /static/images/100702_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:63409 - "GET /static/images/100702_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:63430 - "GET /static/images/100702_CCL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:63682 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63683 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63682 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63682 - "GET /warehouse/visual-layout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52640 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52641 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52638 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52640 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52641 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52640 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52641 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52641 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52641 - "GET /inventory/search?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52641 - "GET /items/search?style=100702&color=BBK&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52638 - "GET /items/search?style=100702&color=TPE&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52640 - "GET /items/search?style=100702&color=CCL&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52640 - "GET /static/images/100615_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/100615_WINE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/100636_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/100641_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/100636_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/100687_CSNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/100702_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/100702_CCL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/100702_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/100721_OFWT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/100721_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/100726_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/100736_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/100743_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/100736_BBK%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/100743_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/100743_CCL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/100736_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/100758_WHT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/100764_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/100822_BLU.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/100822_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/100774_GRY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/100762_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/100822_SAGE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/100918_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/100852_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/100894_CSNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104289_WSL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/100826_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/100903_CSNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104411_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104424_BKRG.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104421_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104437_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104437_GRY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104437_BKPK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104437_BBK%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104457_CHOC.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104457_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104437_NVY%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104450_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104457_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104458_BKW.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104466_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104494_BKW.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104479_LAV.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104479_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104512_BKW.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104494_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104466_WSL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104514_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104512_LAV%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104514_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104512_NAT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104512_WGY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104514_WSL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104532_BKGY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104532_WSL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104532_TPGD.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104546_WINE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104547_BKTQ.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104547_BBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104547_LAV.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104547_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104547_BRN.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104547_RED.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104547_OLV.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104548_NVPR.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104547_WSL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104549_WSL%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104552_ROS.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104549_WSL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104548_GYBL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104556_BRN.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104556_BLSH.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104556_BKNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104556_CSNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104556_SLT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104556_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104556_TPE.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104557_CHAR.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104557_LTBL.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104557_BKNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104556_SLT%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104557_OWGR.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104557_PLUM.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104557_BKNT%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104558_NAT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104557_OWGR%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104558_WGY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104558_BKNT.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104557_CHAR%20%28w%29.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104559_NVRD.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52641 - "GET /static/images/104594_BKW.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52651 - "GET /static/images/104574_WBK.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52640 - "GET /static/images/104571_CHOC.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52638 - "GET /static/images/104594_BLSH.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52644 - "GET /static/images/104594_STN.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52650 - "GET /static/images/104594_NVY.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52674 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52701 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52704 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52701 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /inventory/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /static/analytics.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52705 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52704 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52707 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52701 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52712 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52716 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53675 - "GET /static/analytics.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53675 - "GET /static/warehouse.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53675 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53676 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53689 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53675 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53691 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53692 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53676 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53973 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53973 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53974 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53985 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53987 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53989 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53990 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53994 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54114 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54117 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54118 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54114 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54118 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54118 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54118 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54118 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54120 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54133 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54134 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54120 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54133 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54133 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54133 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54133 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54136 - "GET /inventory/search?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54136 - "GET /items/search?style=100702&color=BBK&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54159 - "GET /items/search?style=100702&color=CCL&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54160 - "GET /items/search?style=100702&color=TPE&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54160 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54159 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54136 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54164 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54136 - "GET /locations/shelves?room_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54136 - "GET /locations/rows?shelf_id=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54136 - "GET /locations/rows?shelf_id=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54179 - "DELETE /locations/rooms/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54179 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54183 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54543 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54543 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54544 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54574 - "GET /locations/shelves HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54575 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54577 - "GET /locations/rooms HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54577 - "GET /locations/rows HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54577 - "GET /inventory/search?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54574 - "GET /items/search?style=100702&color=CCL&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54577 - "GET /items/search?style=100702&color=BBK&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54575 - "GET /items/search?style=100702&color=TPE&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54597 - "GET /inventory/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54632 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54633 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54636 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54639 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54637 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54643 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54658 - "GET /static/warehouse.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54658 - "GET /inventory/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54659 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54687 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54689 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54693 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54692 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54696 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54778 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54779 - "GET /analytics/trends/timeline HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54782 - "GET /analytics/division/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54784 - "GET /analytics/comparison/overlap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54785 - "GET /analytics/placement/analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54790 - "GET /analytics/files/comparison HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54851 - "GET /inventory/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54851 - "GET /inventory/search?limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54851 - "GET /items/search?style=100702&color=BBK&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54855 - "GET /items/search?style=100702&color=CCL&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54856 - "GET /items/search?style=100702&color=TPE&limit=1 HTTP/1.1" 200 OK
