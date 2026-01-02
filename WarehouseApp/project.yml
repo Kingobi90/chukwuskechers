@@ -1,0 +1,24 @@
+name: WarehouseApp
+options:
+  bundleIdPrefix: com.warehouse
+  deploymentTarget:
+    iOS: "15.0"
+  developmentLanguage: en
+targets:
+  WarehouseApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - WarehouseApp
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.warehouse.app
+      INFOPLIST_FILE: WarehouseApp/Info.plist
+      CODE_SIGN_ENTITLEMENTS: WarehouseApp/WarehouseApp.entitlements
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      SWIFT_VERSION: "5.0"
+      TARGETED_DEVICE_FAMILY: "1,2"
+      ENABLE_PREVIEWS: YES
+      DEVELOPMENT_ASSET_PATHS: ""
+      CODE_SIGN_STYLE: Automatic
+      DEVELOPMENT_TEAM: 8YV599396U

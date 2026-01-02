@@ -1,0 +1,7 @@
+tunnel: 4f4c0be3-f542-43b3-949a-cabc8dd94fd1
+credentials-file: /Users/obinna.c/.cloudflared/4f4c0be3-f542-43b3-949a-cabc8dd94fd1.json
+
+ingress:
+  - hostname: warehouse.obinnachukwu.org
+    service: http://localhost:8000
+  - service: http_status:404

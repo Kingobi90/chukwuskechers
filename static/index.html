@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMAC Warehouse Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/static/styles.css?v=2">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo" style="padding: 0; text-align: center; background: white;">
+                    <img src="/static/ChatGPT Image Dec 29, 2025, 09_34_38 AM.png" alt="SMAC Logo" style="width: 100%; height: auto; display: block;">
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item active" onclick="switchTab('upload')"><i data-lucide="upload" style="width: 18px; height: 18px;"></i> Upload Excel</div>
+                <div class="nav-item" onclick="switchTab('seasonal')"><i data-lucide="leaf" style="width: 18px; height: 18px;"></i> Seasonal Drop</div>
+                <div class="nav-item" onclick="switchTab('visual-shelves')"><i data-lucide="package" style="width: 18px; height: 18px;"></i> Visual Shelves</div>
+                <div class="nav-item" onclick="switchTab('locations')"><i data-lucide="map-pin" style="width: 18px; height: 18px;"></i> Manage Locations</div>
+                <div class="nav-item" onclick="switchTab('search')"><i data-lucide="search" style="width: 18px; height: 18px;"></i> Search & Place</div>
+                <div class="nav-item" onclick="switchTab('inventory')"><i data-lucide="clipboard-list" style="width: 18px; height: 18px;"></i> View Inventory</div>
+                <div class="nav-item" onclick="switchTab('stats')"><i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i> Statistics</div>
+                <div class="nav-item" onclick="switchTab('analytics')"><i data-lucide="trending-up" style="width: 18px; height: 18px;"></i> Analytics</div>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="top-bar">
+                <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu" style="width: 20px; height: 20px;"></i></button>
+                <div class="page-title" id="pageTitle">Upload Excel</div>
+                <div class="top-bar-actions">
+                    <div class="status-indicator"><span class="status-dot"></span><span>System Online</span></div>
+                </div>
+            </div>
+            <div class="content-area">
+                <div id="upload-tab" class="tab-content active">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Upload Excel File</h3>
+                        </div>
+                        <div id="upload-alert"></div>
+                        <div class="form-group">
+                            <label class="form-label">Select Excel File (.xlsx, .xls)</label>
+                            <input type="file" id="excel-file" class="form-input" accept=".xlsx,.xls">
+                        </div>
+                        <button class="btn btn-primary" onclick="uploadExcel()"><i data-lucide="upload" style="width: 16px; height: 16px;"></i> Upload & Parse</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Uploaded Files</h3>
+                            <button class="btn btn-secondary" onclick="loadUploadedFiles()"><i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i> Refresh</button>
+                        </div>
+                        <div id="files-list"></div>
+                    </div>
+                </div>
+                <div id="seasonal-tab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Seasonal Drop Management</h3></div>
+                        <p style="margin-bottom: 20px; color: #666;">Upload your seasonal Excel sheet. All styles NOT in the file will be automatically marked as "dropped".</p>
+                        <div class="form-group">
+                            <label class="form-label">Season Name</label>
+                            <input type="text" id="season-name" class="form-input" placeholder="e.g., Spring 2025">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Seasonal Excel File</label>
+                            <input type="file" id="seasonal-file-input" class="form-input" accept=".xlsx,.xls">
+                        </div>
+                        <button class="btn btn-primary" onclick="uploadSeasonalSheet()"><i data-lucide="leaf" style="width: 16px; height: 16px;"></i> Process Seasonal Drop</button>
+                        <div id="seasonal-alert"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Manual Drop Control</h3></div>
+                        <p style="margin-bottom: 20px; color: #666;">Manually mark or unmark items as "dropped" without uploading a file.</p>
+                        <div class="form-group">
+                            <label class="form-label">Search Style to Mark/Unmark</label>
+                            <input type="text" id="manual-drop-style" class="form-input" placeholder="Enter style number">
+                        </div>
+                        <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                            <button class="btn btn-primary" onclick="searchForManualDrop()"><i data-lucide="search" style="width: 16px; height: 16px;"></i> Search Style</button>
+                        </div>
+                        <div id="manual-drop-results"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Bulk Drop Actions</h3></div>
+                        <p style="margin-bottom: 20px; color: #666;">Perform bulk actions on dropped items.</p>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <button class="btn btn-secondary" onclick="resetAllDropped()"><i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Reset All Dropped to Pending</button>
+                            <button class="btn btn-secondary" onclick="viewDroppedCount()"><i data-lucide="info" style="width: 16px; height: 16px;"></i> View Dropped Count</button>
+                        </div>
+                        <div id="bulk-action-alert" style="margin-top: 16px;"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Dropped Items Report</h3></div>
+                        <p style="margin-bottom: 20px; color: #666;">View and export all items currently marked as "dropped".</p>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-secondary" onclick="viewDroppedReport()"><i data-lucide="eye" style="width: 16px; height: 16px;"></i> View Report</button>
+                            <button class="btn btn-primary" onclick="exportDroppedReport()"><i data-lucide="download" style="width: 16px; height: 16px;"></i> Export to File</button>
+                        </div>
+                        <div id="dropped-report" style="margin-top: 24px;"></div>
+                    </div>
+                </div>
+                <div id="visual-shelves-tab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Visual Warehouse Layout</h3>
+                            <button class="btn btn-primary" onclick="loadVisualShelves()"><i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i> Load Warehouse</button>
+                        </div>
+                        <p style="color: #666;">View your warehouse shelves with all placed items. Click any item to see its profile.</p>
+                    </div>
+                    <div id="visual-warehouse-container"></div>
+                </div>
+                <div id="locations-tab" class="tab-content">
+                    <div class="grid-3">
+                        <div class="card">
+                            <h3 class="card-title">Create Room</h3>
+                            <div class="form-group">
+                                <label class="form-label">Room Name</label>
+                                <input type="text" id="room-name" class="form-input" placeholder="e.g., Warehouse A">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description (optional)</label>
+                                <input type="text" id="room-desc" class="form-input" placeholder="e.g., Main storage area">
+                            </div>
+                            <button class="btn btn-primary" onclick="createRoom()">Create Room</button>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Create Shelf</h3>
+                            <div class="form-group">
+                                <label class="form-label">Select Room</label>
+                                <select id="shelf-room-select" class="form-select"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Shelf Name</label>
+                                <input type="text" id="shelf-name" class="form-input" placeholder="e.g., Shelf 1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description (optional)</label>
+                                <input type="text" id="shelf-desc" class="form-input" placeholder="e.g., Top shelf">
+                            </div>
+                            <button class="btn btn-primary" onclick="createShelf()">Create Shelf</button>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Create Row</h3>
+                            <div class="form-group">
+                                <label class="form-label">Select Shelf</label>
+                                <select id="row-shelf-select" class="form-select"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Row Name</label>
+                                <input type="text" id="row-name" class="form-input" placeholder="e.g., Row A">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description (optional)</label>
+                                <input type="text" id="row-desc" class="form-input" placeholder="e.g., Left side">
+                            </div>
+                            <button class="btn btn-primary" onclick="createRow()">Create Row</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Warehouse Structure</h3>
+                            <button class="btn btn-secondary" onclick="loadLocations()"><i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i> Refresh</button>
+                        </div>
+                        <div id="locations-tree"></div>
+                    </div>
+                </div>
+                <div id="search-tab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Search Items</h3></div>
+                        <div class="search-box">
+                            <input type="text" id="search-style" class="form-input" placeholder="Style number">
+                            <input type="text" id="search-color" class="form-input" placeholder="Color">
+                            <button class="btn btn-primary" onclick="searchItems()"><i data-lucide="search" style="width: 16px; height: 16px;"></i> Search</button>
+                        </div>
+                        <div id="search-results"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Barcode Scanner</h3></div>
+                        <p style="margin-bottom: 20px; color: #666;">Scan barcodes or QR codes to quickly search for items.</p>
+                        <div class="form-group">
+                            <label class="form-label">Upload Barcode Image</label>
+                            <input type="file" id="barcode-file-input" class="form-input" accept="image/*" capture="environment">
+                        </div>
+                        <button class="btn btn-primary" onclick="scanBarcodeImage()"><i data-lucide="camera" style="width: 16px; height: 16px;"></i> Scan Barcode</button>
+                        <div id="scanner-alert"></div>
+                        <div id="scanner-results"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Skechers Tag Scanner (OCR)</h3></div>
+                        <p style="margin-bottom: 20px; color: #666;">Scan Skechers product tags to extract style number and color code.</p>
+                        <div style="margin-bottom: 20px; display: flex; gap: 12px;">
+                            <button class="btn btn-primary" onclick="startCameraScanner()" id="start-camera-btn"><i data-lucide="video" style="width: 16px; height: 16px;"></i> Start Live Camera</button>
+                            <button class="btn btn-secondary" onclick="stopCameraScanner()" id="stop-camera-btn" style="display: none;"><i data-lucide="square" style="width: 16px; height: 16px;"></i> Stop Camera</button>
+                        </div>
+                        <div id="camera-container" style="display: none; margin-bottom: 20px;">
+                            <video id="camera-video" autoplay playsinline style="width: 100%; max-width: 640px; border-radius: 12px; border: 3px solid var(--primary-green);"></video>
+                            <canvas id="camera-canvas" style="display: none;"></canvas>
+                            <div id="scan-status" style="margin-top: 12px; padding: 16px; background: var(--light-gray); border-radius: 8px; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: var(--primary-green);">Scanning...</div>
+                                <div id="scan-progress" style="margin-top: 6px; font-size: 14px; color: #666;">Position tag in camera view</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Or Upload Tag Image</label>
+                            <input type="file" id="tag-file-input" class="form-input" accept="image/*" capture="environment">
+                            <button class="btn btn-primary" onclick="scanTagImage()" style="margin-top: 12px;"><i data-lucide="camera" style="width: 16px; height: 16px;"></i> Scan Uploaded Image</button>
+                        </div>
+                        <div id="tag-scanner-alert"></div>
+                        <div id="tag-scanner-results"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Assign Item to Location</h3></div>
+                        <div class="form-group">
+                            <label class="form-label">Style Number</label>
+                            <input type="text" id="assign-style-number" class="form-input" placeholder="Enter style number" onchange="loadColorsForStyle()">
+                        </div>
+                        <div class="form-group" id="assign-color-group" style="display: none;">
+                            <label class="form-label">Select Color</label>
+                            <select id="assign-color-select" class="form-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Select Location (Row)</label>
+                            <select id="assign-row-select" class="form-select"></select>
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-primary" onclick="assignItemLocation()"><i data-lucide="check" style="width: 16px; height: 16px;"></i> Assign Location</button>
+                            <button class="btn btn-secondary" onclick="unassignItemLocation()"><i data-lucide="x" style="width: 16px; height: 16px;"></i> Remove Location</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="inventory-tab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header"><h3 class="card-title">Inventory Items</h3></div>
+                        <div class="form-group">
+                            <label class="form-label">Filter by Status</label>
+                            <select id="status-filter" class="form-select" onchange="loadInventory()">
+                                <option value="all">All Items</option>
+                                <option value="pending">Pending</option>
+                                <option value="placed">Placed</option>
+                                <option value="showroom">Showroom</option>
+                                <option value="waitlist">Waitlist</option>
+                                <option value="dropped">Dropped</option>
+                            </select>
+                        </div>
+                        <div id="inventory-list"></div>
+                    </div>
+                </div>
+                <div id="stats-tab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Database Statistics</h3>
+                            <button class="btn btn-secondary" onclick="loadStats()"><i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i> Refresh Stats</button>
+                        </div>
+                        <div id="stats-content"></div>
+                    </div>
+                </div>
+                <div id="analytics-tab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Excel Files Analytics Dashboard</h3>
+                            <button class="btn btn-primary" onclick="loadAllAnalytics()"><i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i> Refresh All Data</button>
+                        </div>
+                        <p style="color: #666;">Comprehensive comparison and trend analysis across all uploaded files</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Overview</h3>
+                        <div id="overview-stats"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Timeline & Trends</h3>
+                        <div id="timeline-content"></div>
+                        <div class="chart-container"><canvas id="timelineChart"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">File-by-File Comparison</h3>
+                        <div id="file-comparison"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Division Trends Across Files</h3>
+                        <div class="chart-container"><canvas id="divisionTrendsChart"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">File Overlap Analysis</h3>
+                        <div id="overlap-content"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Placement Analytics</h3>
+                        <div class="chart-container"><canvas id="placementChart"></canvas></div>
+                        <div id="placement-details"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Style Family Analysis</h3>
+                        <p style="margin-bottom: 20px; color: #666;">Grouped by first 3 digits of style numbers</p>
+                        <div id="style-family-summary"></div>
+                        <div class="chart-container"><canvas id="styleFamilyChart"></canvas></div>
+                        <div id="style-family-details"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="item-profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Item Profile</h2>
+                <button class="modal-close" onclick="closeItemProfile()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+    <script src="/static/app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
