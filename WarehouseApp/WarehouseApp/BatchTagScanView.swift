@@ -2,9 +2,9 @@ import SwiftUI
 import AVFoundation
 
 struct ScannedItem: Identifiable, Codable {
-    let id = UUID()
-    let styleNumber: String
-    let color: String
+    var id = UUID()
+    var styleNumber: String
+    var color: String
     let timestamp: Date
 }
 
@@ -16,7 +16,11 @@ struct BatchTagScanView: View {
     @State private var exportURL: URL?
     @State private var showingAlert = false
     @State private var alertMessage = ""
+    @State private var editingItem: ScannedItem?
+    @State private var showingEditSheet = false
     @Environment(\.dismiss) var dismiss
+    
+    private let storageKey = "BatchScannedItems"
     
     var body: some View {
         NavigationView {
@@ -181,6 +185,14 @@ struct BatchTagScanView: View {
                                             Text(item.timestamp, style: .time)
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
+                                            Button(action: {
+                                                editingItem = item
+                                                showingEditSheet = true
+                                            }) {
+                                                Image(systemName: "pencil.circle.fill")
+                                                    .foregroundColor(.blue)
+                                                    .font(.title3)
+                                            }
                                         }
                                     }
                                     .onDelete(perform: deleteItems)
@@ -236,6 +248,20 @@ struct BatchTagScanView: View {
             } message: {
                 Text(alertMessage)
             }
+            .sheet(isPresented: $showingEditSheet) {
+                if let item = editingItem {
+                    EditItemView(item: item) { updatedItem in
+                        if let index = scannedItems.firstIndex(where: { $0.id == updatedItem.id }) {
+                            scannedItems[index] = updatedItem
+                            saveItems()
+                        }
+                        showingEditSheet = false
+                    }
+                }
+            }
+            .onAppear {
+                loadItems()
+            }
         }
     }
     
@@ -262,6 +288,7 @@ struct BatchTagScanView: View {
         )
         
         scannedItems.append(item)
+        saveItems()
         
         scanner.extractedStyle = nil
         scanner.extractedColor = nil
@@ -270,10 +297,12 @@ struct BatchTagScanView: View {
     
     private func deleteItems(at offsets: IndexSet) {
         scannedItems.remove(atOffsets: offsets)
+        saveItems()
     }
     
     private func clearAll() {
         scannedItems.removeAll()
+        saveItems()
     }
     
     private func exportToCSV() {
@@ -299,6 +328,81 @@ struct BatchTagScanView: View {
         } catch {
             alertMessage = "Failed to export CSV: \(error.localizedDescription)"
             showingAlert = true
+        }
+    }
+    
+    private func saveItems() {
+        if let encoded = try? JSONEncoder().encode(scannedItems) {
+            UserDefaults.standard.set(encoded, forKey: storageKey)
+        }
+    }
+    
+    private func loadItems() {
+        if let data = UserDefaults.standard.data(forKey: storageKey),
+           let decoded = try? JSONDecoder().decode([ScannedItem].self, from: data) {
+            scannedItems = decoded
+        }
+    }
+}
+
+struct EditItemView: View {
+    let item: ScannedItem
+    let onSave: (ScannedItem) -> Void
+    
+    @State private var styleNumber: String
+    @State private var color: String
+    @Environment(\.dismiss) var dismiss
+    
+    init(item: ScannedItem, onSave: @escaping (ScannedItem) -> Void) {
+        self.item = item
+        self.onSave = onSave
+        _styleNumber = State(initialValue: item.styleNumber)
+        _color = State(initialValue: item.color)
+    }
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Style Number")) {
+                    TextField("Style Number", text: $styleNumber)
+                        .keyboardType(.numberPad)
+                        .font(.title3)
+                }
+                
+                Section(header: Text("Color Code")) {
+                    TextField("Color Code", text: $color)
+                        .textCase(.uppercase)
+                        .autocapitalization(.allCharacters)
+                        .font(.title3)
+                }
+                
+                Section {
+                    HStack {
+                        Text("Scanned at:")
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Text(item.timestamp, style: .time)
+                    }
+                }
+            }
+            .navigationTitle("Edit Item")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        var updatedItem = item
+                        updatedItem.styleNumber = styleNumber.trimmingCharacters(in: .whitespaces)
+                        updatedItem.color = color.uppercased().trimmingCharacters(in: .whitespaces)
+                        onSave(updatedItem)
+                    }
+                    .disabled(styleNumber.trimmingCharacters(in: .whitespaces).isEmpty || color.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
         }
     }
 }
