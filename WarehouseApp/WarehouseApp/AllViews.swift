@@ -2229,7 +2229,7 @@ struct AnalyticsView: View {
                         HStack {
                             Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.title2)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.black)
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Excel Files Analytics")
                                     .font(.title2)
@@ -2253,7 +2253,7 @@ struct AnalyticsView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color.black)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                     }
@@ -2281,7 +2281,7 @@ struct AnalyticsView: View {
                                 VStack(alignment: .leading, spacing: 12) {
                                     HStack {
                                         Image(systemName: "doc.text.fill")
-                                            .foregroundColor(.green)
+                                            .foregroundColor(.black)
                                         Text("Uploaded Files (\(filesData.totalFiles))")
                                             .font(.title3)
                                             .fontWeight(.bold)
@@ -2298,7 +2298,7 @@ struct AnalyticsView: View {
                                 VStack(alignment: .leading, spacing: 12) {
                                     HStack {
                                         Image(systemName: "chart.xyaxis.line")
-                                            .foregroundColor(.purple)
+                                            .foregroundColor(Color(.darkGray))
                                         Text("Growth Trends")
                                             .font(.title3)
                                             .fontWeight(.bold)
@@ -2358,7 +2358,7 @@ struct FileAnalyticsCard: View {
                         if let fileDate = file.fileDate {
                             Text(formatDate(fileDate))
                                 .font(.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.black)
                         }
                         Text("Uploaded: \(formatDate(file.uploadedAt))")
                             .font(.caption)
@@ -2379,7 +2379,7 @@ struct FileAnalyticsCard: View {
                     Text("\(file.totalItems)")
                         .font(.title3)
                         .fontWeight(.bold)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.black)
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -2389,7 +2389,7 @@ struct FileAnalyticsCard: View {
                     Text("\(file.uniqueItems)")
                         .font(.title3)
                         .fontWeight(.bold)
-                        .foregroundColor(.green)
+                        .foregroundColor(Color(.darkGray))
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -2399,7 +2399,7 @@ struct FileAnalyticsCard: View {
                     Text("\(file.sharedItems)")
                         .font(.title3)
                         .fontWeight(.bold)
-                        .foregroundColor(.orange)
+                        .foregroundColor(Color(.systemGray))
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -2409,7 +2409,7 @@ struct FileAnalyticsCard: View {
                     Text("\(file.uniqueStyles)")
                         .font(.title3)
                         .fontWeight(.bold)
-                        .foregroundColor(.purple)
+                        .foregroundColor(.black)
                 }
             }
             
@@ -2498,7 +2498,7 @@ struct TimelineTrendsCard: View {
                     Text("\(timeline.totalFiles)")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.black)
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -2508,7 +2508,7 @@ struct TimelineTrendsCard: View {
                     Text("\(timeline.finalUniqueStyles)")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(.green)
+                        .foregroundColor(Color(.darkGray))
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -2518,7 +2518,7 @@ struct TimelineTrendsCard: View {
                     Text("\(timeline.finalUniqueItems)")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(.purple)
+                        .foregroundColor(Color(.systemGray))
                 }
             }
             .padding()
@@ -2531,7 +2531,7 @@ struct TimelineTrendsCard: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Circle()
-                            .fill(Color.blue)
+                            .fill(Color.black)
                             .frame(width: 12, height: 12)
                         Text("Cumulative Items Growth")
                             .font(.subheadline)
@@ -2544,13 +2544,7 @@ struct TimelineTrendsCard: View {
                             VStack {
                                 Spacer()
                                 Rectangle()
-                                    .fill(
-                                        LinearGradient(
-                                            colors: [Color.blue, Color.blue.opacity(0.6)],
-                                            startPoint: .top,
-                                            endPoint: .bottom
-                                        )
-                                    )
+                                    .fill(Color.black)
                                     .frame(height: CGFloat(point.cumulativeItems) / CGFloat(maxValue) * 100)
                                     .cornerRadius(4)
                             }
@@ -2563,7 +2557,7 @@ struct TimelineTrendsCard: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Circle()
-                            .fill(Color.green)
+                            .fill(Color(.darkGray))
                             .frame(width: 12, height: 12)
                         Text("Cumulative Styles Growth")
                             .font(.subheadline)
@@ -2576,13 +2570,7 @@ struct TimelineTrendsCard: View {
                             VStack {
                                 Spacer()
                                 Rectangle()
-                                    .fill(
-                                        LinearGradient(
-                                            colors: [Color.green, Color.green.opacity(0.6)],
-                                            startPoint: .top,
-                                            endPoint: .bottom
-                                        )
-                                    )
+                                    .fill(Color(.darkGray))
                                     .frame(height: CGFloat(point.cumulativeStyles) / CGFloat(maxStyles) * 100)
                                     .cornerRadius(4)
                             }
