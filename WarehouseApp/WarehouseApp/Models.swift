@@ -321,23 +321,31 @@ struct FileAnalytics: Codable, Identifiable {
     let fileDate: String?
     let uploadedAt: String
     let totalItems: Int
+    let totalStyles: Int
     let uniqueItems: Int
-    let sharedItems: Int
     let uniqueStyles: Int
+    let sharedWithSome: Int
+    let sharedWithAll: Int
     let divisions: [String: Int]
     let genders: [String: Int]
     let statuses: [String: Int]
     let widths: [String: Int]
     let status: String
     
+    var sharedItems: Int {
+        sharedWithSome + sharedWithAll
+    }
+    
     enum CodingKeys: String, CodingKey {
         case filename
         case fileDate = "file_date"
         case uploadedAt = "uploaded_at"
         case totalItems = "total_items"
+        case totalStyles = "total_styles"
         case uniqueItems = "unique_items"
-        case sharedItems = "shared_items"
         case uniqueStyles = "unique_styles"
+        case sharedWithSome = "shared_with_some"
+        case sharedWithAll = "shared_with_all"
         case divisions
         case genders
         case statuses
