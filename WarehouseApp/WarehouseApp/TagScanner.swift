@@ -17,26 +17,47 @@ class TagScannerViewModel: NSObject, ObservableObject {
     private let processingInterval: TimeInterval = 0.5
     
     private let validColors = [
+        // Black variants
         "BLK", "BBK", "BKMT", "BKCC", "BKBL", "BKGD", "BKGY", "BKGN", "BKOR", "BKPK", "BKPR", "BKRD", "BKSL", "BKWT", "BKW",
+        // White variants
         "WHT", "OFWT", "WBK", "WBL", "WCC", "WGD", "WGN", "WGY", "WMT", "WMLT", "WNV", "WOR", "WPK", "WPR", "WRD", "WSL", "WTP", "WBUG",
+        // Navy variants
         "NVY", "NVBL", "NVBK", "NVCC", "NVGY", "NVGN", "NVMT", "NVOR", "NVPK", "NVRD", "NVWT",
+        // Gray variants
         "GRY", "GRAY", "GYBL", "GYBK", "GYMT", "GYOR", "GYPK", "GYRD", "GYWT",
+        // Charcoal variants
         "CHAR", "CC", "CCBK", "CCBL", "CCLV", "CCOR", "CCPK",
+        // Blue variants
         "BLU", "LTBL", "DKBL", "BLMT", "BLPK", "BLRD", "BLWT", "BLGY", "BLOR",
+        // Red variants
         "RED", "RDBK", "RDBR", "RDGY", "RDMT", "RDPK", "RDWT",
+        // Pink variants
         "PINK", "PNK", "LTPK", "PKMT", "PKWT", "PKBL", "PKPR",
+        // Purple variants
         "PRPL", "PRP", "PRCL", "PRMT", "PRPK", "PRWT",
+        // Green variants
         "GRN", "LTGN", "DKGN", "GNMT", "GNWT", "GNBL",
+        // Olive variants
         "OLV", "OLVG",
+        // Brown variants
         "BRN", "DKBR", "LTBR", "CDB", "BRMT", "BRWT",
+        // Beige/Tan/Natural variants
         "BGE", "TAN", "TPE", "TAUP", "DKTP", "LTTN", "SAND", "KHAK", "KHK", "NAT", "NTMT", "NTTN",
+        // Orange variants
         "ORG", "ORNG", "ORMT", "ORWT", "ORBL", "CRL",
+        // Yellow variants
         "YLW", "YLLW", "YLMT", "YLWT",
+        // Multi/Pattern variants
         "MULT", "MLTI", "CAMO", "PRNT", "FLRL",
+        // Metallic variants
         "SLV", "SLVR", "GLD", "GOLD", "RSGD", "BRNZ",
+        // Stone/Slate variants
         "STN", "SLTP", "SLAT",
+        // Other colors
         "MVE", "MAUV", "LAV", "LVND", "MINT", "TEAL", "TRQ",
-        "COC", "COCO", "WINE", "BUG", "BURG", "PLUM", "PEACH", "LMGN", "LIME"
+        "COC", "COCO", "WINE", "BUG", "BURG", "PLUM", "PEACH", "LMGN", "LIME",
+        // Additional common codes
+        "DKGY", "LTGY", "NVGY", "CHRC", "NVCC"
     ]
     
     override init() {
@@ -90,15 +111,19 @@ class TagScannerViewModel: NSObject, ObservableObject {
         let request = VNRecognizeTextRequest { [weak self] request, error in
             guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
             
-            let recognizedStrings = observations.compactMap { observation in
-                observation.topCandidates(1).first?.string
+            // Store text with bounding boxes for spatial analysis
+            var textWithBounds: [(text: String, bounds: CGRect)] = []
+            
+            for observation in observations {
+                guard let candidate = observation.topCandidates(1).first else { continue }
+                textWithBounds.append((text: candidate.string, bounds: observation.boundingBox))
             }
             
-            let fullText = recognizedStrings.joined(separator: " ")
+            let fullText = textWithBounds.map { $0.text }.joined(separator: " ")
             
             DispatchQueue.main.async {
                 self?.detectedText = fullText
-                self?.parseTagText(fullText)
+                self?.parseTagTextWithSpatialAwareness(textWithBounds)
             }
         }
         
@@ -110,120 +135,104 @@ class TagScannerViewModel: NSObject, ObservableObject {
         try? handler.perform([request])
     }
     
-    private func parseTagText(_ text: String) {
-        let uppercased = text.uppercased()
-        let components = uppercased.components(separatedBy: CharacterSet.whitespacesAndNewlines)
-        
+    private func parseTagTextWithSpatialAwareness(_ textWithBounds: [(text: String, bounds: CGRect)]) {
         var foundStyle: String?
-        var foundColors: [String] = []
-        var labeledColor: String?
+        var foundColor: String?
         
-        // Parse style number - Priority 1: After SN/RN label
-        for (index, component) in components.enumerated() {
-            if component.contains("SN/RN") || component.contains("SN") || component.contains("RN") {
-                let nextIndex = index + 1
-                if nextIndex < components.count {
-                    let potentialStyle = components[nextIndex]
-                        .replacingOccurrences(of: "SN/RN", with: "")
-                        .replacingOccurrences(of: "SN", with: "")
+        // Find the Y-coordinate of "Color" or "CLR Code" label
+        var colorLabelY: CGFloat?
+        var styleLabelY: CGFloat?
+        
+        for item in textWithBounds {
+            let uppercased = item.text.uppercased()
+            
+            // Find Color row
+            if uppercased.contains("COLOR") || uppercased == "CLR" || uppercased.contains("CLR CODE") {
+                colorLabelY = item.bounds.midY
+            }
+            
+            // Find SN/RN row
+            if uppercased.contains("SN/RN") || uppercased == "SN/RN" {
+                styleLabelY = item.bounds.midY
+            }
+        }
+        
+        // Now find values on the same rows
+        let yTolerance: CGFloat = 0.02 // Allow 2% vertical tolerance for same row
+        
+        // Extract style number from SN/RN row
+        if let styleY = styleLabelY {
+            for item in textWithBounds {
+                let yDiff = abs(item.bounds.midY - styleY)
+                if yDiff < yTolerance {
+                    // Check if this text contains 5-6 digits
+                    let cleaned = item.text.replacingOccurrences(of: "SN", with: "")
                         .replacingOccurrences(of: "RN", with: "")
                         .trimmingCharacters(in: CharacterSet(charactersIn: ":/- "))
                     
-                    if (potentialStyle.count == 5 || potentialStyle.count == 6) && potentialStyle.allSatisfy({ $0.isNumber }) {
-                        foundStyle = potentialStyle
+                    if (cleaned.count == 5 || cleaned.count == 6) && cleaned.allSatisfy({ $0.isNumber }) {
+                        foundStyle = cleaned
+                        break
                     }
                 }
             }
-            
-            // Priority 1: Look for color after COLOR label
-            if component.contains("COLOR") || component.contains("CLR") {
-                let nextIndex = index + 1
-                if nextIndex < components.count {
-                    let potentialColor = components[nextIndex]
-                        .replacingOccurrences(of: "COLOR", with: "")
-                        .replacingOccurrences(of: "CLR", with: "")
-                        .replacingOccurrences(of: "CODE", with: "")
-                        .replacingOccurrences(of: ":", with: "")
+        }
+        
+        // Extract color from Color row
+        if let colorY = colorLabelY {
+            for item in textWithBounds {
+                let yDiff = abs(item.bounds.midY - colorY)
+                if yDiff < yTolerance {
+                    let uppercased = item.text.uppercased()
                         .trimmingCharacters(in: CharacterSet(charactersIn: ":- "))
                     
-                    if validColors.contains(potentialColor) {
-                        labeledColor = potentialColor
+                    // Check if this is a valid color code
+                    if validColors.contains(uppercased) && uppercased != "COLOR" && uppercased != "CLR" {
+                        foundColor = uppercased
+                        break
                     }
                 }
             }
         }
         
-        // Fallback: Find any 5-6 consecutive digits (smart filtering)
+        // Fallback: If no style found with spatial awareness, try pattern matching
         if foundStyle == nil {
-            // Try 6 digits first
-            let sixDigitPattern = "\\b\\d{6}\\b"
-            if let regex = try? NSRegularExpression(pattern: sixDigitPattern) {
-                let range = NSRange(uppercased.startIndex..., in: uppercased)
-                let matches = regex.matches(in: uppercased, range: range)
+            for item in textWithBounds {
+                let cleaned = item.text.replacingOccurrences(of: "SN", with: "")
+                    .replacingOccurrences(of: "RN", with: "")
+                    .trimmingCharacters(in: CharacterSet(charactersIn: ":/- "))
                 
-                // Filter out obvious garbage (like dates, prices, etc.)
-                for match in matches {
-                    if let matchRange = Range(match.range, in: uppercased) {
-                        let candidate = String(uppercased[matchRange])
-                        // Avoid obvious dates (starts with 19, 20, 21) and repeated digits
-                        if !candidate.hasPrefix("19") && !candidate.hasPrefix("20") && !candidate.hasPrefix("21") {
-                            let uniqueDigits = Set(candidate)
-                            // Avoid all same digit (like 111111, 000000)
-                            if uniqueDigits.count > 1 {
-                                foundStyle = candidate
-                                break
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // If no 6-digit found, try 5 digits
-            if foundStyle == nil {
-                let fiveDigitPattern = "\\b\\d{5}\\b"
-                if let regex = try? NSRegularExpression(pattern: fiveDigitPattern) {
-                    let range = NSRange(uppercased.startIndex..., in: uppercased)
-                    let matches = regex.matches(in: uppercased, range: range)
-                    
-                    for match in matches {
-                        if let matchRange = Range(match.range, in: uppercased) {
-                            let candidate = String(uppercased[matchRange])
-                            let uniqueDigits = Set(candidate)
-                            // Avoid all same digit
-                            if uniqueDigits.count > 1 {
-                                foundStyle = candidate
-                                break
-                            }
-                        }
+                if (cleaned.count == 5 || cleaned.count == 6) && cleaned.allSatisfy({ $0.isNumber }) {
+                    let uniqueDigits = Set(cleaned)
+                    // Avoid dates and repeated digits
+                    if !cleaned.hasPrefix("19") && !cleaned.hasPrefix("20") && !cleaned.hasPrefix("21") && uniqueDigits.count > 1 {
+                        foundStyle = cleaned
+                        break
                     }
                 }
             }
         }
         
-        // Priority 2: Find all exact color matches in text (sorted by length to avoid substrings)
-        let sortedColors = validColors.sorted { $0.count > $1.count }
-        for color in sortedColors {
-            let pattern = "\\b" + NSRegularExpression.escapedPattern(for: color) + "\\b"
-            if let regex = try? NSRegularExpression(pattern: pattern) {
-                let range = NSRange(uppercased.startIndex..., in: uppercased)
-                let matches = regex.matches(in: uppercased, range: range)
-                if !matches.isEmpty && !foundColors.contains(color) {
-                    foundColors.append(color)
+        // Fallback: If no color found with spatial awareness, look for any valid color
+        if foundColor == nil {
+            let sortedColors = validColors.sorted { $0.count > $1.count }
+            for item in textWithBounds {
+                let uppercased = item.text.uppercased()
+                for color in sortedColors {
+                    if uppercased == color {
+                        foundColor = color
+                        break
+                    }
                 }
+                if foundColor != nil { break }
             }
-        }
-        
-        // Prioritize labeled color
-        if let labeled = labeledColor {
-            foundColors.removeAll { $0 == labeled }
-            foundColors.insert(labeled, at: 0)
         }
         
         if let style = foundStyle {
             extractedStyle = style
-            allDetectedColors = foundColors
-            multipleColorsDetected = foundColors.count > 1
-            extractedColor = foundColors.first
+            extractedColor = foundColor
+            allDetectedColors = foundColor != nil ? [foundColor!] : []
+            multipleColorsDetected = false
         }
     }
 }
