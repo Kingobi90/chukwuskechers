@@ -39,11 +39,9 @@ function switchTab(tabName) {
 }
 
 function startVisualShelvesAutoRefresh() {
-    stopVisualShelvesAutoRefresh(); // Clear any existing interval
-    // Auto-refresh every 30 seconds
-    visualShelvesRefreshInterval = setInterval(() => {
-        loadVisualShelves();
-    }, 30000);
+    // Auto-refresh disabled to prevent images from disappearing
+    // Users can manually refresh if needed
+    stopVisualShelvesAutoRefresh();
 }
 
 function stopVisualShelvesAutoRefresh() {
@@ -402,8 +400,13 @@ async function loadVisualShelves() {
     container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading warehouse...</p></div>';
 
     try {
-        const roomsResponse = await fetch(`${API_BASE}/locations/rooms`);
-        const rooms = await roomsResponse.json();
+        // Use the optimized endpoint that fetches everything in one call
+        const response = await fetch(`${API_BASE}/warehouse/visual-layout`);
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        const rooms = data.warehouse_layout || [];
 
         if (rooms.length === 0) {
             container.innerHTML = '<p style="color: #666; text-align: center; padding: 40px;">No warehouse structure created yet. Go to "Manage Locations" to create rooms, shelves, and rows.</p>';
@@ -422,17 +425,12 @@ async function loadVisualShelves() {
         for (let roomIndex = 0; roomIndex < rooms.length; roomIndex++) {
             const room = rooms[roomIndex];
             html += '<div class="room-carousel-item">';
-            const shelvesResponse = await fetch(`${API_BASE}/locations/shelves?room_id=${room.id}`);
-            const shelves = await shelvesResponse.json();
+            const shelves = room.shelves || [];
             
             let totalItems = 0;
             for (const shelf of shelves) {
-                const rowsResponse = await fetch(`${API_BASE}/locations/rows?shelf_id=${shelf.id}`);
-                const rows = await rowsResponse.json();
-                for (const row of rows) {
-                    const itemsResponse = await fetch(`${API_BASE}/locations/rows/${row.id}/items`);
-                    const itemsData = await itemsResponse.json();
-                    totalItems += (itemsData.items || []).length;
+                for (const row of shelf.rows || []) {
+                    totalItems += (row.items || []).length;
                 }
             }
             
@@ -455,14 +453,11 @@ async function loadVisualShelves() {
                 
                 for (let shelfIndex = 0; shelfIndex < shelves.length; shelfIndex++) {
                     const shelf = shelves[shelfIndex];
-                    const rowsResponse = await fetch(`${API_BASE}/locations/rows?shelf_id=${shelf.id}`);
-                    const rows = await rowsResponse.json();
+                    const rows = shelf.rows || [];
                     
                     let shelfItemCount = 0;
                     for (const row of rows) {
-                        const itemsResponse = await fetch(`${API_BASE}/locations/rows/${row.id}/items`);
-                        const itemsData = await itemsResponse.json();
-                        shelfItemCount += (itemsData.items || []).length;
+                        shelfItemCount += (row.items || []).length;
                     }
                     
                     html += `<div class="shelf-carousel-item">`;
@@ -486,25 +481,25 @@ async function loadVisualShelves() {
 
                         for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
                             const row = rows[rowIndex];
-                            const itemsResponse = await fetch(`${API_BASE}/locations/rows/${row.id}/items`);
-                            const itemsData = await itemsResponse.json();
-                            const items = itemsData.items || [];
+                            const items = row.items || [];
 
                             html += `<div class="row-carousel-item">`;
                             html += `<div class="visual-row">`;
-                            html += `<div class="visual-row-header"><span><i data-lucide="package" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>${row.name}</span><span>${items.length} items</span></div>`;
+                            html += `<div class="visual-row-header">`;
+                            html += `<span><i data-lucide="package" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>${row.name}</span><span style="margin-left: 10px;">${items.length} items</span>`;
+                            html += `</div>`;
 
                             if (items.length > 0) {
                                 html += `<div class="items-grid">${items.map(item => `
                                     <div class="item-card" onclick="showItemProfile('${item.id}')">
-                                        ${item.image_url ? `<img src="${API_BASE}${item.image_url}" class="item-image" alt="${item.style}">` : '<div class="item-image" style="display: flex; align-items: center; justify-content: center; color: #999;">No Image</div>'}
+                                        ${item.image_url ? `<img src="${item.image_url}" class="item-image" alt="${item.style}" onerror="this.style.display='none'">` : '<div class="item-image" style="display: flex; align-items: center; justify-content: center; color: #999;">No Image</div>'}
                                         <div class="item-style">${item.style}</div>
                                         <div class="item-color">${item.color}</div>
                                         <div class="item-division">${item.division || 'N/A'}</div>
                                     </div>
                                 `).join('')}</div>`;
                             } else {
-                                html += '<p style="color: #999; text-align: center; padding: 20px; font-style: italic;">Empty row - no items placed here yet</p>';
+                                html += '<div style="min-height: 200px; display: flex; align-items: center; justify-content: center; padding: 40px; background: #f9f9f9; border-radius: 8px; margin: 20px 0;"><p style="color: #999; text-align: center; font-style: italic; font-size: 16px;">📦 Empty row - no items placed here yet<br><span style="font-size: 14px; opacity: 0.8;">Use "Search & Place Items" to add items to this location</span></p></div>';
                             }
                             html += '</div></div>'; // Close visual-row, row-carousel-item
                         }
@@ -527,6 +522,14 @@ async function loadVisualShelves() {
         }
 
         html += '</div></div>'; // Close room-carousel-track, room-carousel
+        
+        // Add prominent location indicator
+        html += '<div style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);">';
+        html += '<div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">CURRENT LOCATION</div>';
+        html += '<div id="current-location-display" style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">Loading...</div>';
+        html += '<div id="current-sublocation-display" style="font-size: 16px; opacity: 0.95;">Please wait...</div>';
+        html += '</div>';
+        
         if (rooms.length > 1) {
             html += '<div class="room-indicator">Room <span id="room-current">1</span> of ' + rooms.length + '</div>';
         }
@@ -534,6 +537,28 @@ async function loadVisualShelves() {
 
         container.innerHTML = html;
         lucide.createIcons();
+
+        // Initialize location display with first room/shelf/row
+        if (rooms.length > 0) {
+            const firstRoom = rooms[0];
+            const locationDisplay = document.getElementById('current-location-display');
+            const sublocationDisplay = document.getElementById('current-sublocation-display');
+            if (locationDisplay) locationDisplay.textContent = firstRoom.name;
+            if (sublocationDisplay) {
+                if (firstRoom.shelves && firstRoom.shelves.length > 0) {
+                    const firstShelf = firstRoom.shelves[0];
+                    if (firstShelf.rows && firstShelf.rows.length > 0) {
+                        const firstRow = firstShelf.rows[0];
+                        const itemCount = firstRow.items ? firstRow.items.length : 0;
+                        sublocationDisplay.textContent = `${firstShelf.name} → ${firstRow.name} (${itemCount} items)`;
+                    } else {
+                        sublocationDisplay.textContent = `${firstShelf.name} - No rows`;
+                    }
+                } else {
+                    sublocationDisplay.textContent = 'No shelves in this room';
+                }
+            }
+        }
 
         // Initialize room navigation
         if (rooms.length > 1) {
@@ -801,6 +826,16 @@ function navigateRoom(direction) {
     if (currentSpan) currentSpan.textContent = newIndex + 1;
 
     updateRoomNavigation(newIndex, items.length);
+    
+    // Update location display
+    const roomElement = items[newIndex].querySelector('.visual-room');
+    if (roomElement) {
+        const roomName = roomElement.querySelector('.visual-room-header span').textContent.trim().split('(')[0].trim();
+        const locationDisplay = document.getElementById('current-location-display');
+        const sublocationDisplay = document.getElementById('current-sublocation-display');
+        if (locationDisplay) locationDisplay.textContent = roomName;
+        if (sublocationDisplay) sublocationDisplay.textContent = 'Navigate shelves using gray arrows';
+    }
 }
 
 function updateRoomNavigation(currentIndex, totalRooms) {
@@ -876,6 +911,21 @@ function navigateShelf(roomId, direction) {
     
     prevBtn.disabled = newIndex === 0;
     nextBtn.disabled = newIndex === items.length - 1;
+    
+    // Update location display
+    const roomTrack = document.getElementById('room-track');
+    const roomIndex = roomTrack ? parseInt(roomTrack.dataset.current) : 0;
+    const roomElement = document.querySelector('.room-carousel-item:nth-child(' + (roomIndex + 1) + ') .visual-room-header span');
+    const shelfElement = items[newIndex].querySelector('.visual-shelf-header span');
+    
+    if (roomElement && shelfElement) {
+        const roomName = roomElement.textContent.trim().split('(')[0].trim();
+        const shelfName = shelfElement.textContent.trim().split('(')[0].trim();
+        const locationDisplay = document.getElementById('current-location-display');
+        const sublocationDisplay = document.getElementById('current-sublocation-display');
+        if (locationDisplay) locationDisplay.textContent = roomName;
+        if (sublocationDisplay) sublocationDisplay.textContent = shelfName + ' - Navigate rows using orange arrows';
+    }
 }
 
 function navigateRow(roomId, shelfId, direction) {
@@ -895,6 +945,26 @@ function navigateRow(roomId, shelfId, direction) {
     if (currentSpan) currentSpan.textContent = newIndex + 1;
 
     updateRowNavigation(roomId, shelfId, newIndex, items.length);
+    
+    // Update location display
+    const roomTrack = document.getElementById('room-track');
+    const shelfTrack = document.getElementById(`shelf-track-${roomId}`);
+    const roomIndex = roomTrack ? parseInt(roomTrack.dataset.current) : 0;
+    const shelfIndex = shelfTrack ? parseInt(shelfTrack.dataset.current) : 0;
+    
+    const roomElement = document.querySelector('.room-carousel-item:nth-child(' + (roomIndex + 1) + ') .visual-room-header span');
+    const shelfElement = document.querySelector(`#shelf-track-${roomId} .shelf-carousel-item:nth-child(` + (shelfIndex + 1) + ') .visual-shelf-header span');
+    const rowElement = items[newIndex].querySelector('.visual-row-header');
+    
+    if (roomElement && shelfElement && rowElement) {
+        const roomName = roomElement.textContent.trim().split('(')[0].trim();
+        const shelfName = shelfElement.textContent.trim().split('(')[0].trim();
+        const rowInfo = rowElement.textContent.trim();
+        const locationDisplay = document.getElementById('current-location-display');
+        const sublocationDisplay = document.getElementById('current-sublocation-display');
+        if (locationDisplay) locationDisplay.textContent = roomName + ' → ' + shelfName;
+        if (sublocationDisplay) sublocationDisplay.textContent = rowInfo;
+    }
 }
 
 function updateRowNavigation(roomId, shelfId, currentIndex, totalRows) {
@@ -909,10 +979,10 @@ async function loadAllAnalytics() {
     try {
         await Promise.all([
             loadAnalyticsOverview(),
-            loadAnalyticsTimeline(),
+            loadAnalyticsGrowthTrends(),
             loadAnalyticsFileComparison(),
-            loadAnalyticsDivisionTrends(),
-            loadAnalyticsOverlap(),
+            loadAnalyticsDivisionDeepDive(),
+            loadAnalyticsTimeline(),
             loadAnalyticsPlacement(),
             loadAnalyticsStyleFamilies()
         ]);
@@ -927,18 +997,124 @@ async function loadAnalyticsOverview() {
             document.getElementById('overview-stats').innerHTML = '<p style="color: #666; text-align: center; padding: 40px;">No files uploaded yet. Upload an Excel file to see analytics.</p>';
             return;
         }
-        const totalItems = data.files.reduce((sum, f) => sum + (f.total_items || 0), 0);
-        const totalStyles = data.files.reduce((sum, f) => sum + (f.unique_styles || 0), 0);
         document.getElementById('overview-stats').innerHTML = `
             <div class="grid-3" style="margin-top: 20px;">
                 <div class="stat-card"><div class="stat-value">${data.total_files || 0}</div><div class="stat-label">Total Files</div></div>
-                <div class="stat-card"><div class="stat-value">${totalItems}</div><div class="stat-label">Total Items</div></div>
-                <div class="stat-card"><div class="stat-value">${totalStyles}</div><div class="stat-label">Unique Styles</div></div>
+                <div class="stat-card"><div class="stat-value">${data.total_items_all_files || 0}</div><div class="stat-label">Total Items</div></div>
+                <div class="stat-card"><div class="stat-value">${data.total_styles_all_files || 0}</div><div class="stat-label">Unique Styles</div></div>
             </div>
         `;
     } catch (error) { 
         console.error('Error loading overview:', error);
         document.getElementById('overview-stats').innerHTML = '<p style="color: #f44336; text-align: center; padding: 20px;">Error loading analytics data</p>';
+    }
+}
+
+async function loadAnalyticsGrowthTrends() {
+    console.log('loadAnalyticsGrowthTrends called');
+    try {
+        const response = await fetch(`${API_BASE}/analytics/trends/timeline`);
+        console.log('Growth trends response status:', response.status);
+        const data = await response.json();
+        console.log('Growth trends data:', data);
+        if (!data.timeline || data.timeline.length === 0) {
+            document.getElementById('growth-metrics').innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No trend data available</p>';
+            return;
+        }
+        
+        // Display growth metrics
+        const metrics = data.growth_metrics;
+        document.getElementById('growth-metrics').innerHTML = `
+            <div class="grid-4" style="margin-top: 20px;">
+                <div class="stat-card"><div class="stat-value">${metrics.overall_growth_pct}%</div><div class="stat-label">Overall Growth</div></div>
+                <div class="stat-card"><div class="stat-value">${metrics.avg_growth_rate}%</div><div class="stat-label">Avg Growth Rate</div></div>
+                <div class="stat-card"><div class="stat-value">${metrics.total_new_styles_added}</div><div class="stat-label">Total New Styles</div></div>
+                <div class="stat-card"><div class="stat-value">${metrics.peak_inventory}</div><div class="stat-label">Peak Inventory</div></div>
+            </div>
+        `;
+        
+        // Growth chart
+        const chartEl = document.getElementById('growthChart');
+        if (!chartEl) {
+            console.error('growthChart canvas element not found');
+            return;
+        }
+        const ctx = chartEl.getContext('2d');
+        if (window.growthChart && typeof window.growthChart.destroy === 'function') {
+            window.growthChart.destroy();
+        }
+        window.growthChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.timeline.map(t => t.filename),
+                datasets: [{
+                    label: 'New Styles',
+                    data: data.timeline.map(t => t.new_styles),
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Returning Styles',
+                    data: data.timeline.map(t => t.returning_styles),
+                    borderColor: '#2196F3',
+                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Dropped Styles',
+                    data: data.timeline.map(t => t.dropped_styles),
+                    borderColor: '#f44336',
+                    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'New vs Returning vs Dropped Styles' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Seasonality data
+        if (data.seasonality && data.seasonality.length > 0) {
+            let html = '<h4 style="margin-top: 30px; margin-bottom: 15px;">Seasonality Patterns</h4><div class="grid-2" style="gap: 12px;">';
+            data.seasonality.forEach(month => {
+                html += `<div style="padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">${month.month}</div>
+                    <div style="font-size: 14px; color: #666;">
+                        Items: ${month.total_items} | Styles: ${month.unique_styles} | New Styles: ${month.new_styles}<br>
+                        Files: ${month.files_count}
+                    </div>
+                </div>`;
+            });
+            html += '</div>';
+            document.getElementById('seasonality-content').innerHTML = html;
+        }
+    } catch (error) { 
+        console.error('Error loading growth trends:', error);
+        console.error('Error details:', error.message, error.stack);
+        const growthMetricsEl = document.getElementById('growth-metrics');
+        if (growthMetricsEl) {
+            growthMetricsEl.innerHTML = '<p style="color: #f44336; text-align: center; padding: 20px;">Error loading growth data: ' + error.message + '</p>';
+        }
     }
 }
 
@@ -960,8 +1136,15 @@ async function loadAnalyticsTimeline() {
         html += '</div>';
         document.getElementById('timeline-content').innerHTML = html;
         
-        const ctx = document.getElementById('timelineChart').getContext('2d');
-        if (window.timelineChart) window.timelineChart.destroy();
+        const timelineChartEl = document.getElementById('timelineChart');
+        if (!timelineChartEl) {
+            console.error('timelineChart canvas element not found');
+            return;
+        }
+        const ctx = timelineChartEl.getContext('2d');
+        if (window.timelineChart && typeof window.timelineChart.destroy === 'function') {
+            window.timelineChart.destroy();
+        }
         window.timelineChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -1001,9 +1184,12 @@ async function loadAnalyticsFileComparison() {
             html += `<div class="card" style="background: #f8f9fa;">
                 <h4 style="margin-bottom: 12px; color: #2c2c2c;">${file.filename}</h4>
                 <div style="display: grid; gap: 8px; font-size: 14px;">
-                    <div><strong>Total Items:</strong> ${file.total_items || 0}</div>
-                    <div><strong>Unique Styles:</strong> ${file.unique_styles || 0}</div>
-                    <div><strong>Shared Items:</strong> ${file.shared_items || 0}</div>
+                    <div><strong>Total Items:</strong> ${file.total_items || 0} (${file.contribution_to_total_pct}% of all inventory)</div>
+                    <div><strong>Total Styles:</strong> ${file.total_styles || 0}</div>
+                    <div style="color: #4CAF50;"><strong>Unique to This File:</strong> ${file.unique_items || 0} items (${file.unique_items_pct}%) | ${file.unique_styles || 0} styles</div>
+                    <div style="color: #2196F3;"><strong>Shared with Others:</strong> ${file.shared_with_some || 0} items</div>
+                    <div style="color: #FF9800;"><strong>In All Files:</strong> ${file.shared_with_all || 0} items</div>
+                    <div><strong>Placement Rate:</strong> ${file.placement_rate}% (${file.placed_items}/${file.total_items})</div>
                     <div><strong>Status:</strong> <span class="badge badge-success">${file.status || 'unknown'}</span></div>
                 </div>
             </div>`;
@@ -1013,6 +1199,159 @@ async function loadAnalyticsFileComparison() {
     } catch (error) { 
         console.error('Error loading file comparison:', error);
         document.getElementById('file-comparison').innerHTML = '<p style="color: #f44336; text-align: center; padding: 20px;">Error loading file comparison</p>';
+    }
+}
+
+async function loadAnalyticsStylePerformance() {
+    try {
+        const response = await fetch(`${API_BASE}/analytics/styles/performance`);
+        const data = await response.json();
+        if (!data.style_metrics || data.style_metrics.length === 0) {
+            document.getElementById('style-performance-summary').innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No style data available</p>';
+            return;
+        }
+        
+        const summary = data.summary;
+        document.getElementById('style-performance-summary').innerHTML = `
+            <div class="grid-4" style="margin-top: 20px;">
+                <div class="stat-card"><div class="stat-value">${summary.total_unique_styles}</div><div class="stat-label">Total Styles</div></div>
+                <div class="stat-card" style="background: #fff3cd;"><div class="stat-value">${summary.one_offs}</div><div class="stat-label">One-Off Styles (${summary.one_off_percentage}%)</div></div>
+                <div class="stat-card" style="background: #d4edda;"><div class="stat-value">${summary.evergreen_styles}</div><div class="stat-label">Evergreen Styles</div></div>
+                <div class="stat-card" style="background: #f8d7da;"><div class="stat-value">${summary.discontinued_styles}</div><div class="stat-label">Discontinued</div></div>
+            </div>
+        `;
+        
+        // Lifecycle chart
+        const lifecycleChartEl = document.getElementById('styleLifecycleChart');
+        if (!lifecycleChartEl) {
+            console.error('styleLifecycleChart canvas element not found');
+            return;
+        }
+        const ctx = lifecycleChartEl.getContext('2d');
+        if (window.styleLifecycleChart && typeof window.styleLifecycleChart.destroy === 'function') {
+            window.styleLifecycleChart.destroy();
+        }
+        window.styleLifecycleChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['One-Off', 'Active', 'Evergreen', 'Discontinued'],
+                datasets: [{
+                    data: [summary.one_offs, summary.active_styles, summary.evergreen_styles, summary.discontinued_styles],
+                    backgroundColor: ['#FFC107', '#2196F3', '#4CAF50', '#f44336']
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Style Lifecycle Distribution' }
+                }
+            }
+        });
+        
+        // Top performers
+        let html = '<h4 style="margin-top: 30px; margin-bottom: 15px;">Most Frequent Styles (Top 10)</h4><div style="overflow-x: auto;"><table class="data-table"><thead><tr><th>Style</th><th>Frequency</th><th>Files</th><th>Colors</th><th>Lifecycle</th></tr></thead><tbody>';
+        data.most_frequent.slice(0, 10).forEach(style => {
+            const lifecycleColor = style.lifecycle === 'evergreen' ? '#4CAF50' : style.lifecycle === 'one-off' ? '#FFC107' : style.lifecycle === 'discontinued' ? '#f44336' : '#2196F3';
+            html += `<tr>
+                <td><strong>${style.style}</strong></td>
+                <td>${style.frequency_score}%</td>
+                <td>${style.file_appearances}</td>
+                <td>${style.color_variants}</td>
+                <td><span style="color: ${lifecycleColor}; font-weight: 600;">${style.lifecycle}</span></td>
+            </tr>`;
+        });
+        html += '</tbody></table></div>';
+        document.getElementById('style-performance-details').innerHTML = html;
+    } catch (error) { 
+        console.error('Error loading style performance:', error);
+        document.getElementById('style-performance-summary').innerHTML = '<p style="color: #f44336; text-align: center; padding: 20px;">Error loading style performance</p>';
+    }
+}
+
+async function loadAnalyticsDivisionDeepDive() {
+    try {
+        const response = await fetch(`${API_BASE}/analytics/division/trends`);
+        const data = await response.json();
+        if (!data.trends || data.trends.length === 0) {
+            document.getElementById('division-summary').innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No division data available</p>';
+            return;
+        }
+        
+        // Division summary
+        let html = '<div class="grid-4" style="margin-top: 20px; gap: 12px;">';
+        Object.entries(data.division_summary).forEach(([div, info]) => {
+            const change = data.market_share_changes[div];
+            const trendColor = change && change.trend === 'growing' ? '#4CAF50' : change && change.trend === 'declining' ? '#f44336' : '#666';
+            const trendText = change && change.trend === 'growing' ? '↑' : change && change.trend === 'declining' ? '↓' : '→';
+            html += `<div style="padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid ${trendColor};">
+                <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">${div} <span style="color: ${trendColor};">${trendText}</span></div>
+                <div style="font-size: 11px; color: #666;">
+                    ${info.market_share_pct}% share<br>
+                    ${info.total_items} items | ${info.unique_styles} styles<br>
+                    ${info.files_present_in} files
+                </div>
+            </div>`;
+        });
+        html += '</div>';
+        document.getElementById('division-summary').innerHTML = html;
+        
+        // Market share changes chart
+        const marketShareChartEl = document.getElementById('divisionMarketShareChart');
+        if (!marketShareChartEl) {
+            console.error('divisionMarketShareChart canvas element not found');
+            return;
+        }
+        const ctx = marketShareChartEl.getContext('2d');
+        if (window.divisionMarketShareChart && typeof window.divisionMarketShareChart.destroy === 'function') {
+            window.divisionMarketShareChart.destroy();
+        }
+        
+        const datasets = data.all_divisions.map((div, idx) => ({
+            label: div,
+            data: data.trends.map(t => t.divisions[div] ? t.divisions[div].market_share_pct : 0),
+            borderColor: `hsl(${idx * 360 / data.all_divisions.length}, 70%, 50%)`,
+            backgroundColor: `hsla(${idx * 360 / data.all_divisions.length}, 70%, 50%, 0.1)`,
+            tension: 0.4
+        }));
+        
+        window.divisionMarketShareChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.trends.map(t => t.filename),
+                datasets: datasets
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Division Market Share Over Time' }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Market Share %' }
+                    }
+                }
+            }
+        });
+        
+        // Market share changes details
+        html = '<h4 style="margin-top: 30px; margin-bottom: 15px;">Market Share Changes</h4><div class="grid-2" style="gap: 12px;">';
+        Object.entries(data.market_share_changes).forEach(([div, change]) => {
+            const trendColor = change.trend === 'growing' ? '#4CAF50' : change.trend === 'declining' ? '#f44336' : '#666';
+            html += `<div style="padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <div style="font-weight: 600; margin-bottom: 8px;">${div}</div>
+                <div style="font-size: 14px; color: #666;">
+                    Initial: ${change.initial_share}% → Current: ${change.current_share}%<br>
+                    <span style="color: ${trendColor}; font-weight: 600;">Change: ${change.change_pct > 0 ? '+' : ''}${change.change_pct}% (${change.trend})</span>
+                </div>
+            </div>`;
+        });
+        html += '</div>';
+        document.getElementById('division-trends-details').innerHTML = html;
+    } catch (error) { 
+        console.error('Error loading division deep dive:', error);
+        document.getElementById('division-summary').innerHTML = '<p style="color: #f44336; text-align: center; padding: 20px;">Error loading division data</p>';
     }
 }
 

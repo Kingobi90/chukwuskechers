@@ -12,6 +12,7 @@
 		3888E41FE6101654C49CF4F4 /* AllViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7360AAC65846CA6824651A /* AllViews.swift */; };
 		4B4C6C582670FC1AB614253A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FCB1A66AE25F386969FC65 /* ContentView.swift */; };
 		5C8D9E1A3F7B2D4E8A9C1F23 /* BulkLocationScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A2B7C9D6F8E1A5B3C4D5E6 /* BulkLocationScanView.swift */; };
+		6D7E8F9A4C5B6D7E8F9A0B1C /* BatchTagScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A69788C9D0E1F2 /* BatchTagScanView.swift */; };
 		727D870DBCD8E2C8C47EF5AD /* TagScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A427FD352F8FFC46E5E9F820 /* TagScanner.swift */; };
 		9F5F4B24BB7474E6A54CDB01 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E61048F6CF73D716A120F6 /* Models.swift */; };
 		FBE6573B92D5C7790F045C13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AE5D0EB99EF32B4136F06 /* APIService.swift */; };
@@ -28,6 +29,7 @@
 		BE7E9B7EB482D0817FED92CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DA3AE5D0EB99EF32B4136F06 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		E4A2B7C9D6F8E1A5B3C4D5E6 /* BulkLocationScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkLocationScanView.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A69788C9D0E1F2 /* BatchTagScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchTagScanView.swift; sourceTree = "<group>"; };
 		FEB5AE02EEDD873A51281A11 /* WarehouseApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WarehouseApp.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -38,6 +40,7 @@
 				9A7360AAC65846CA6824651A /* AllViews.swift */,
 				DA3AE5D0EB99EF32B4136F06 /* APIService.swift */,
 				1694B365A40452783F995AB5 /* Assets.xcassets */,
+				F1E2D3C4B5A69788C9D0E1F2 /* BatchTagScanView.swift */,
 				E4A2B7C9D6F8E1A5B3C4D5E6 /* BulkLocationScanView.swift */,
 				A7FCB1A66AE25F386969FC65 /* ContentView.swift */,
 				BE7E9B7EB482D0817FED92CC /* Info.plist */,
@@ -137,6 +140,7 @@
 			files = (
 				FBE6573B92D5C7790F045C13 /* APIService.swift in Sources */,
 				3888E41FE6101654C49CF4F4 /* AllViews.swift in Sources */,
+				6D7E8F9A4C5B6D7E8F9A0B1C /* BatchTagScanView.swift in Sources */,
 				5C8D9E1A3F7B2D4E8A9C1F23 /* BulkLocationScanView.swift in Sources */,
 				4B4C6C582670FC1AB614253A /* ContentView.swift in Sources */,
 				9F5F4B24BB7474E6A54CDB01 /* Models.swift in Sources */,
@@ -211,6 +215,7 @@
 				CODE_SIGN_ENTITLEMENTS = WarehouseApp/WarehouseApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 8YV599396U;
 				ENABLE_PREVIEWS = YES;
@@ -220,7 +225,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.warehouse.app;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smacagence.warehouse;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -234,6 +240,7 @@
 				CODE_SIGN_ENTITLEMENTS = WarehouseApp/WarehouseApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 8YV599396U;
 				ENABLE_PREVIEWS = YES;
@@ -243,7 +250,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.warehouse.app;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smacagence.warehouse;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

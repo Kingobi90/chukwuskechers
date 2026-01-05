@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
-from backend.database import get_db, Item, StyleSummary, FileUpload, InventoryAction
+from database import get_db, Item, StyleSummary, FileUpload, InventoryAction
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 import re
@@ -39,30 +39,51 @@ def parse_date_from_filename(filename: str) -> Optional[datetime]:
 
 @router.get("/files/comparison")
 async def compare_files(db: Session = Depends(get_db)):
-    """Compare all uploaded files with detailed analytics."""
+    """Compare each file against all other files collectively."""
     files = db.query(FileUpload).order_by(FileUpload.uploaded_at).all()
     
     if not files:
         return {"files": [], "total_files": 0}
+    
+    # Get all items across all files
+    all_items = db.query(Item).all()
+    all_items_set = {f"{item.style}_{item.color}" for item in all_items}
+    all_styles_set = {item.style for item in all_items}
     
     comparisons = []
     
     for file in files:
         file_date = parse_date_from_filename(file.filename)
         
+        # Items in this file
         items_in_file = db.query(Item).filter(
             Item.source_files.contains(file.filename)
         ).all()
         
-        unique_to_file = []
-        shared_items = []
+        # Items NOT in this file (all other files)
+        items_not_in_file = db.query(Item).filter(
+            ~Item.source_files.contains(file.filename)
+        ).all()
+        
+        # Categorize items
+        unique_to_file = []  # Only in this file
+        shared_with_some = []  # In this file + some others
+        shared_with_all = []  # In this file + all other files
         
         for item in items_in_file:
             if len(item.source_files) == 1:
                 unique_to_file.append(item)
+            elif len(item.source_files) == len(files):
+                shared_with_all.append(item)
             else:
-                shared_items.append(item)
+                shared_with_some.append(item)
         
+        # Styles analysis
+        styles_in_file = {item.style for item in items_in_file}
+        styles_not_in_file = {item.style for item in items_not_in_file}
+        unique_styles_to_file = styles_in_file - styles_not_in_file
+        
+        # Division breakdown
         divisions = defaultdict(int)
         genders = defaultdict(int)
         statuses = defaultdict(int)
@@ -83,18 +104,40 @@ async def compare_files(db: Session = Depends(get_db)):
             else:
                 widths['regular'] += 1
         
-        unique_styles = db.query(func.count(func.distinct(Item.style))).filter(
-            Item.source_files.contains(file.filename)
-        ).scalar()
+        # Placement metrics
+        placed_items = [item for item in items_in_file if item.row_id is not None]
+        
+        # Calculate percentages
+        total_items = len(items_in_file)
+        unique_pct = (len(unique_to_file) / total_items * 100) if total_items > 0 else 0
+        shared_pct = ((len(shared_with_some) + len(shared_with_all)) / total_items * 100) if total_items > 0 else 0
+        contribution_to_total = (total_items / len(all_items) * 100) if len(all_items) > 0 else 0
         
         comparisons.append({
             "filename": file.filename,
             "file_date": file_date.isoformat() if file_date else None,
             "uploaded_at": file.uploaded_at.isoformat(),
-            "total_items": len(items_in_file),
+            "total_items": total_items,
+            "total_styles": len(styles_in_file),
+            
+            # Uniqueness metrics
             "unique_items": len(unique_to_file),
-            "shared_items": len(shared_items),
-            "unique_styles": unique_styles,
+            "unique_items_pct": round(unique_pct, 2),
+            "unique_styles": len(unique_styles_to_file),
+            
+            # Sharing metrics
+            "shared_with_some": len(shared_with_some),
+            "shared_with_all": len(shared_with_all),
+            "shared_items_pct": round(shared_pct, 2),
+            
+            # Contribution to overall inventory
+            "contribution_to_total_pct": round(contribution_to_total, 2),
+            
+            # Placement metrics
+            "placed_items": len(placed_items),
+            "placement_rate": round((len(placed_items) / total_items * 100), 2) if total_items > 0 else 0,
+            
+            # Breakdowns
             "divisions": dict(divisions),
             "genders": dict(genders),
             "statuses": dict(statuses),
@@ -104,7 +147,9 @@ async def compare_files(db: Session = Depends(get_db)):
     
     return {
         "files": comparisons,
-        "total_files": len(files)
+        "total_files": len(files),
+        "total_items_all_files": len(all_items),
+        "total_styles_all_files": len(all_styles_set)
     }
 
 
@@ -159,51 +204,125 @@ async def file_details(filename: str, db: Session = Depends(get_db)):
 
 @router.get("/trends/timeline")
 async def timeline_trends(db: Session = Depends(get_db)):
-    """Analyze trends across files ordered by date."""
+    """Comprehensive trend analysis: growth/decline, new vs returning styles, seasonality."""
     files = db.query(FileUpload).order_by(FileUpload.uploaded_at).all()
+    
+    if not files:
+        return {"timeline": [], "growth_metrics": {}, "seasonality": {}}
     
     timeline = []
     cumulative_styles = set()
     cumulative_items = set()
+    previous_styles = set()
+    previous_items = set()
     
-    for file in files:
+    monthly_data = defaultdict(lambda: {
+        "items": 0,
+        "styles": set(),
+        "new_styles": set(),
+        "files": []
+    })
+    
+    for idx, file in enumerate(files):
         file_date = parse_date_from_filename(file.filename)
         
         items = db.query(Item).filter(
             Item.source_files.contains(file.filename)
         ).all()
         
-        new_styles = set()
-        new_items = set()
+        current_styles = set()
+        current_items = set()
         
         for item in items:
             item_key = f"{item.style}_{item.color}"
-            new_items.add(item_key)
-            new_styles.add(item.style)
+            current_items.add(item_key)
+            current_styles.add(item.style)
         
-        truly_new_styles = new_styles - cumulative_styles
-        truly_new_items = new_items - cumulative_items
+        # Calculate new vs returning
+        truly_new_styles = current_styles - cumulative_styles
+        returning_styles = current_styles & previous_styles
+        dropped_styles = previous_styles - current_styles if idx > 0 else set()
         
-        cumulative_styles.update(new_styles)
-        cumulative_items.update(new_items)
+        truly_new_items = current_items - cumulative_items
+        returning_items = current_items & previous_items
+        
+        # Growth calculations
+        growth_rate = 0
+        if idx > 0 and len(previous_items) > 0:
+            growth_rate = ((len(current_items) - len(previous_items)) / len(previous_items)) * 100
+        
+        # Update cumulative
+        cumulative_styles.update(current_styles)
+        cumulative_items.update(current_items)
+        
+        # Seasonality tracking
+        if file_date:
+            month_key = file_date.strftime("%Y-%m")
+            monthly_data[month_key]["items"] += len(items)
+            monthly_data[month_key]["styles"].update(current_styles)
+            monthly_data[month_key]["new_styles"].update(truly_new_styles)
+            monthly_data[month_key]["files"].append(file.filename)
         
         timeline.append({
             "filename": file.filename,
             "file_date": file_date.isoformat() if file_date else None,
             "uploaded_at": file.uploaded_at.isoformat(),
             "items_in_file": len(items),
-            "styles_in_file": len(new_styles),
+            "styles_in_file": len(current_styles),
+            
+            # New vs Returning
             "new_styles": len(truly_new_styles),
+            "returning_styles": len(returning_styles),
+            "dropped_styles": len(dropped_styles),
             "new_items": len(truly_new_items),
+            "returning_items": len(returning_items),
+            
+            # Growth metrics
+            "growth_rate": round(growth_rate, 2),
             "cumulative_styles": len(cumulative_styles),
-            "cumulative_items": len(cumulative_items)
+            "cumulative_items": len(cumulative_items),
+            
+            # Retention
+            "style_retention_rate": round((len(returning_styles) / len(previous_styles) * 100), 2) if len(previous_styles) > 0 else 0,
+        })
+        
+        previous_styles = current_styles.copy()
+        previous_items = current_items.copy()
+    
+    # Calculate overall growth metrics
+    if len(timeline) > 1:
+        first_file_items = timeline[0]["items_in_file"]
+        last_file_items = timeline[-1]["items_in_file"]
+        overall_growth = ((last_file_items - first_file_items) / first_file_items * 100) if first_file_items > 0 else 0
+        avg_growth = sum(t["growth_rate"] for t in timeline[1:]) / (len(timeline) - 1) if len(timeline) > 1 else 0
+    else:
+        overall_growth = 0
+        avg_growth = 0
+    
+    # Seasonality patterns
+    seasonality = []
+    for month, data in sorted(monthly_data.items()):
+        seasonality.append({
+            "month": month,
+            "total_items": data["items"],
+            "unique_styles": len(data["styles"]),
+            "new_styles": len(data["new_styles"]),
+            "files_count": len(data["files"]),
+            "files": data["files"]
         })
     
     return {
         "timeline": timeline,
         "total_files": len(files),
         "final_unique_styles": len(cumulative_styles),
-        "final_unique_items": len(cumulative_items)
+        "final_unique_items": len(cumulative_items),
+        "growth_metrics": {
+            "overall_growth_pct": round(overall_growth, 2),
+            "avg_growth_rate": round(avg_growth, 2),
+            "total_new_styles_added": len(cumulative_styles),
+            "peak_inventory": max(t["cumulative_items"] for t in timeline) if timeline else 0,
+        },
+        "seasonality": seasonality
     }
 
 
@@ -254,10 +373,15 @@ async def file_overlap_analysis(db: Session = Depends(get_db)):
 
 @router.get("/division/trends")
 async def division_trends(db: Session = Depends(get_db)):
-    """Analyze division trends across files."""
+    """Deep dive into division performance across files with market share changes."""
     files = db.query(FileUpload).order_by(FileUpload.uploaded_at).all()
     
+    if not files:
+        return {"trends": [], "market_share_changes": {}, "division_summary": {}}
+    
     trends = []
+    all_divisions = set()
+    division_timeline = defaultdict(list)
     
     for file in files:
         file_date = parse_date_from_filename(file.filename)
@@ -266,25 +390,96 @@ async def division_trends(db: Session = Depends(get_db)):
             Item.source_files.contains(file.filename)
         ).all()
         
-        divisions = defaultdict(int)
+        divisions = defaultdict(lambda: {
+            "count": 0,
+            "styles": set(),
+            "placed": 0,
+            "pending": 0
+        })
+        
         for item in items:
             if item.division:
-                divisions[item.division] += 1
+                divisions[item.division]["count"] += 1
+                divisions[item.division]["styles"].add(item.style)
+                if item.row_id is not None:
+                    divisions[item.division]["placed"] += 1
+                if item.status == 'pending':
+                    divisions[item.division]["pending"] += 1
+        
+        total_items = len(items)
+        division_data = {}
+        
+        for div, data in divisions.items():
+            all_divisions.add(div)
+            market_share = (data["count"] / total_items * 100) if total_items > 0 else 0
+            division_data[div] = {
+                "count": data["count"],
+                "unique_styles": len(data["styles"]),
+                "market_share_pct": round(market_share, 2),
+                "placed": data["placed"],
+                "pending": data["pending"],
+                "placement_rate": round((data["placed"] / data["count"] * 100), 2) if data["count"] > 0 else 0
+            }
+            
+            division_timeline[div].append({
+                "filename": file.filename,
+                "date": file_date.isoformat() if file_date else None,
+                "market_share": round(market_share, 2),
+                "count": data["count"]
+            })
         
         trends.append({
             "filename": file.filename,
             "file_date": file_date.isoformat() if file_date else None,
-            "divisions": dict(divisions),
-            "total_items": len(items)
+            "divisions": division_data,
+            "total_items": total_items
         })
     
-    all_divisions = set()
-    for trend in trends:
-        all_divisions.update(trend["divisions"].keys())
+    # Calculate market share changes
+    market_share_changes = {}
+    for div in all_divisions:
+        timeline = division_timeline[div]
+        if len(timeline) >= 2:
+            first_share = timeline[0]["market_share"]
+            last_share = timeline[-1]["market_share"]
+            change = last_share - first_share
+            market_share_changes[div] = {
+                "initial_share": first_share,
+                "current_share": last_share,
+                "change_pct": round(change, 2),
+                "trend": "growing" if change > 0 else "declining" if change < 0 else "stable"
+            }
+    
+    # Division summary across all files
+    all_items = db.query(Item).all()
+    division_summary = defaultdict(lambda: {
+        "total_items": 0,
+        "unique_styles": set(),
+        "files": set()
+    })
+    
+    for item in all_items:
+        if item.division:
+            division_summary[item.division]["total_items"] += 1
+            division_summary[item.division]["unique_styles"].add(item.style)
+            division_summary[item.division]["files"].update(item.source_files)
+    
+    summary = {
+        div: {
+            "total_items": data["total_items"],
+            "unique_styles": len(data["unique_styles"]),
+            "files_present_in": len(data["files"]),
+            "market_share_pct": round((data["total_items"] / len(all_items) * 100), 2) if len(all_items) > 0 else 0
+        }
+        for div, data in division_summary.items()
+    }
     
     return {
         "trends": trends,
-        "all_divisions": sorted(list(all_divisions))
+        "all_divisions": sorted(list(all_divisions)),
+        "market_share_changes": market_share_changes,
+        "division_summary": summary,
+        "division_timeline": {div: timeline for div, timeline in division_timeline.items()}
     }
 
 
@@ -317,6 +512,116 @@ async def placement_analytics(db: Session = Depends(get_db)):
         })
     
     return {"placement_analytics": analytics}
+
+
+@router.get("/styles/performance")
+async def style_performance_metrics(db: Session = Depends(get_db)):
+    """Analyze style performance: frequency across files, one-offs, lifecycle tracking."""
+    files = db.query(FileUpload).order_by(FileUpload.uploaded_at).all()
+    all_items = db.query(Item).all()
+    
+    if not all_items:
+        return {"style_metrics": [], "summary": {}}
+    
+    # Track each style's performance
+    style_data = defaultdict(lambda: {
+        "items": [],
+        "colors": set(),
+        "files": set(),
+        "first_seen": None,
+        "last_seen": None,
+        "file_appearances": [],
+        "divisions": set(),
+        "placed_count": 0,
+        "total_count": 0
+    })
+    
+    # Build style timeline
+    for item in all_items:
+        style = item.style
+        style_data[style]["items"].append(item.id)
+        style_data[style]["colors"].add(item.color)
+        style_data[style]["files"].update(item.source_files)
+        style_data[style]["total_count"] += 1
+        
+        if item.division:
+            style_data[style]["divisions"].add(item.division)
+        if item.row_id is not None:
+            style_data[style]["placed_count"] += 1
+        
+        # Track appearances in files
+        for source_file in item.source_files:
+            if source_file not in [f["filename"] for f in style_data[style]["file_appearances"]]:
+                file_obj = next((f for f in files if f.filename == source_file), None)
+                if file_obj:
+                    file_date = parse_date_from_filename(source_file)
+                    style_data[style]["file_appearances"].append({
+                        "filename": source_file,
+                        "date": file_date.isoformat() if file_date else None
+                    })
+    
+    # Calculate metrics for each style
+    style_metrics = []
+    for style, data in style_data.items():
+        appearances = sorted(data["file_appearances"], key=lambda x: x["date"] or "")
+        first_seen = appearances[0] if appearances else None
+        last_seen = appearances[-1] if appearances else None
+        
+        # Determine lifecycle status
+        file_count = len(data["files"])
+        if file_count == 1:
+            lifecycle = "one-off"
+        elif file_count == len(files):
+            lifecycle = "evergreen"
+        elif last_seen == appearances[-1] if appearances else None:
+            lifecycle = "active"
+        else:
+            lifecycle = "discontinued"
+        
+        # Calculate frequency score (appearances / total files)
+        frequency_score = (file_count / len(files) * 100) if len(files) > 0 else 0
+        
+        style_metrics.append({
+            "style": style,
+            "total_items": data["total_count"],
+            "color_variants": len(data["colors"]),
+            "file_appearances": file_count,
+            "frequency_score": round(frequency_score, 2),
+            "lifecycle": lifecycle,
+            "first_seen": first_seen["date"] if first_seen else None,
+            "last_seen": last_seen["date"] if last_seen else None,
+            "divisions": list(data["divisions"]),
+            "placed_count": data["placed_count"],
+            "placement_rate": round((data["placed_count"] / data["total_count"] * 100), 2) if data["total_count"] > 0 else 0,
+            "files": list(data["files"])
+        })
+    
+    # Sort by different criteria
+    most_frequent = sorted(style_metrics, key=lambda x: x["frequency_score"], reverse=True)[:20]
+    one_offs = [s for s in style_metrics if s["lifecycle"] == "one-off"]
+    evergreen = [s for s in style_metrics if s["lifecycle"] == "evergreen"]
+    discontinued = [s for s in style_metrics if s["lifecycle"] == "discontinued"]
+    
+    # Summary statistics
+    summary = {
+        "total_unique_styles": len(style_metrics),
+        "one_offs": len(one_offs),
+        "evergreen_styles": len(evergreen),
+        "discontinued_styles": len(discontinued),
+        "active_styles": len([s for s in style_metrics if s["lifecycle"] == "active"]),
+        "avg_file_appearances": round(sum(s["file_appearances"] for s in style_metrics) / len(style_metrics), 2) if style_metrics else 0,
+        "avg_color_variants": round(sum(s["color_variants"] for s in style_metrics) / len(style_metrics), 2) if style_metrics else 0,
+        "one_off_percentage": round((len(one_offs) / len(style_metrics) * 100), 2) if style_metrics else 0
+    }
+    
+    return {
+        "style_metrics": style_metrics,
+        "most_frequent": most_frequent,
+        "one_offs": one_offs[:50],  # Limit for performance
+        "evergreen": evergreen,
+        "discontinued": discontinued[:50],
+        "summary": summary
+    }
 
 
 @router.get("/style-families")

@@ -49,16 +49,21 @@ struct HomeView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    Text("Warehouse Management")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.top)
+                    VStack(spacing: 8) {
+                        Text("Warehouse Management")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        Text("SMAC Inventory System")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top)
                     
                     VStack(spacing: 16) {
                         HomeSectionCard(
                             title: "Find",
                             icon: "magnifyingglass.circle.fill",
-                            color: .purple
+                            color: .black
                         ) {
                             VStack(spacing: 12) {
                                 Button(action: {
@@ -81,14 +86,14 @@ struct HomeView: View {
                                     CompactButton(
                                         title: "Visual Shelves",
                                         icon: "square.grid.3x3",
-                                        color: .green,
+                                        color: .black,
                                         action: { showingVisualShelves = true }
                                     )
                                     
                                     CompactButton(
                                         title: "Locations",
                                         icon: "building.2",
-                                        color: .orange,
+                                        color: Color(.darkGray),
                                         action: { showingLocations = true }
                                     )
                                 }
@@ -98,20 +103,20 @@ struct HomeView: View {
                         HomeSectionCard(
                             title: "Operations",
                             icon: "calendar.circle.fill",
-                            color: .blue
+                            color: Color(.darkGray)
                         ) {
                             VStack(spacing: 12) {
                                 CompactButton(
                                     title: "Bulk Location Scan",
                                     icon: "qrcode.viewfinder",
-                                    color: .blue,
+                                    color: .black,
                                     action: { showingBulkScan = true }
                                 )
                                 
                                 CompactButton(
                                     title: "Seasonal Drops",
                                     icon: "calendar.badge.exclamationmark",
-                                    color: .red,
+                                    color: Color(.darkGray),
                                     action: { showingSeasonalDrop = true }
                                 )
                             }
@@ -120,20 +125,20 @@ struct HomeView: View {
                         HomeSectionCard(
                             title: "Insights",
                             icon: "chart.bar.xaxis.circle.fill",
-                            color: .indigo
+                            color: Color(.systemGray)
                         ) {
                             HStack(spacing: 12) {
                                 CompactButton(
                                     title: "Analytics",
                                     icon: "chart.line.uptrend.xyaxis",
-                                    color: .indigo,
+                                    color: .black,
                                     action: { showingAnalytics = true }
                                 )
                                 
                                 CompactButton(
                                     title: "Statistics",
                                     icon: "chart.bar",
-                                    color: .red,
+                                    color: Color(.darkGray),
                                     action: { showingStatistics = true }
                                 )
                             }
@@ -200,7 +205,7 @@ struct HomeSectionCard<Content: View>: View {
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 2)
     }
 }
 
@@ -226,14 +231,9 @@ struct CompactButton: View {
             .foregroundColor(.white)
             .padding()
             .frame(maxWidth: .infinity)
-            .background(
-                LinearGradient(
-                    colors: [color, color.opacity(0.8)],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
+            .background(color)
             .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
         }
     }
 }
@@ -308,6 +308,7 @@ struct SettingsView: View {
 
 struct WorkflowView: View {
     @State private var showingBulkScan = false
+    @State private var showingBatchTagScan = false
     
     var body: some View {
         NavigationView {
@@ -323,18 +324,17 @@ struct WorkflowView: View {
                             title: "Bulk Location Scan",
                             description: "Quickly scan multiple items into a specific location",
                             icon: "qrcode.viewfinder",
-                            color: .blue,
+                            color: .black,
                             action: { showingBulkScan = true }
                         )
                         
                         WorkflowCard(
-                            title: "More Workflows",
-                            description: "Additional workflows coming soon",
-                            icon: "arrow.triangle.branch",
-                            color: .gray,
-                            action: {}
+                            title: "Batch Tag Scanner",
+                            description: "Scan multiple tags and export to CSV",
+                            icon: "barcode.viewfinder",
+                            color: .green,
+                            action: { showingBatchTagScan = true }
                         )
-                        .opacity(0.5)
                     }
                     .padding(.horizontal)
                 }
@@ -343,6 +343,9 @@ struct WorkflowView: View {
             .navigationTitle("Workflow")
             .sheet(isPresented: $showingBulkScan) {
                 BulkLocationScanView()
+            }
+            .sheet(isPresented: $showingBatchTagScan) {
+                BatchTagScanView()
             }
         }
     }
@@ -362,13 +365,7 @@ struct WorkflowCard: View {
                     .font(.system(size: 40))
                     .foregroundColor(.white)
                     .frame(width: 70, height: 70)
-                    .background(
-                        LinearGradient(
-                            colors: [color, color.opacity(0.7)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .background(color)
                     .cornerRadius(12)
                 
                 VStack(alignment: .leading, spacing: 4) {
