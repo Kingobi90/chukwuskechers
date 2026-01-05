@@ -67,14 +67,14 @@ struct HomeView: View {
                         HomeButton(
                             title: "Visual Shelves",
                             icon: "square.grid.3x3",
-                            color: Color(.darkGray),
+                            color: .black,
                             action: { showingVisualShelves = true }
                         )
                         
                         HomeButton(
                             title: "Locations",
                             icon: "building.2",
-                            color: Color(.systemGray),
+                            color: .black,
                             action: { showingLocations = true }
                         )
                         
@@ -88,14 +88,14 @@ struct HomeView: View {
                         HomeButton(
                             title: "Seasonal Drops",
                             icon: "calendar.badge.exclamationmark",
-                            color: Color(.darkGray),
+                            color: .black,
                             action: { showingSeasonalDrop = true }
                         )
                         
                         HomeButton(
                             title: "Analytics",
                             icon: "chart.line.uptrend.xyaxis",
-                            color: Color(.systemGray),
+                            color: .black,
                             action: { showingAnalytics = true }
                         )
                         
