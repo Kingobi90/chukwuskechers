@@ -18,6 +18,7 @@ struct BatchTagScanView: View {
     @State private var alertMessage = ""
     @State private var editingItem: ScannedItem?
     @State private var showingEditSheet = false
+    @State private var isExporting = false
     @Environment(\.dismiss) var dismiss
     
     private let storageKey = "BatchScannedItems"
@@ -213,8 +214,14 @@ struct BatchTagScanView: View {
                                     
                                     Button(action: exportToCSV) {
                                         HStack {
-                                            Image(systemName: "square.and.arrow.up")
-                                            Text("Export CSV")
+                                            if isExporting {
+                                                ProgressView()
+                                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                                Text("Preparing...")
+                                            } else {
+                                                Image(systemName: "square.and.arrow.up")
+                                                Text("Export CSV")
+                                            }
                                         }
                                         .frame(maxWidth: .infinity)
                                         .padding()
@@ -222,6 +229,7 @@ struct BatchTagScanView: View {
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
                                     }
+                                    .disabled(isExporting)
                                 }
                                 .padding(.horizontal)
                             }
@@ -312,22 +320,33 @@ struct BatchTagScanView: View {
             return
         }
         
-        var csvString = "stylenumber,color\n"
+        isExporting = true
         
-        for item in scannedItems {
-            csvString += "\(item.styleNumber),\(item.color)\n"
-        }
-        
-        let fileName = "scanned_tags_\(Date().timeIntervalSince1970).csv"
-        let path = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-        
-        do {
-            try csvString.write(to: path, atomically: true, encoding: .utf8)
-            exportURL = path
-            showingExportSheet = true
-        } catch {
-            alertMessage = "Failed to export CSV: \(error.localizedDescription)"
-            showingAlert = true
+        DispatchQueue.global(qos: .userInitiated).async {
+            var csvString = "stylenumber,color\n"
+            
+            for item in self.scannedItems {
+                csvString += "\(item.styleNumber),\(item.color)\n"
+            }
+            
+            let fileName = "scanned_tags_\(Date().timeIntervalSince1970).csv"
+            let path = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+            
+            do {
+                try csvString.write(to: path, atomically: true, encoding: .utf8)
+                
+                DispatchQueue.main.async {
+                    self.isExporting = false
+                    self.exportURL = path
+                    self.showingExportSheet = true
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.isExporting = false
+                    self.alertMessage = "Failed to export CSV: \(error.localizedDescription)"
+                    self.showingAlert = true
+                }
+            }
         }
     }
     
