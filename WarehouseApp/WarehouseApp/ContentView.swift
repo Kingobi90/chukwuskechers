@@ -50,9 +50,6 @@ struct HomeView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     VStack(spacing: 8) {
-                        Text("Warehouse Management")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
                         Text("SMAC Inventory System")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
