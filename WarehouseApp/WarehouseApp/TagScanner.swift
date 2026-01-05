@@ -118,7 +118,7 @@ class TagScannerViewModel: NSObject, ObservableObject {
         var foundColors: [String] = []
         var labeledColor: String?
         
-        // Parse style number
+        // Parse style number - Priority 1: After SN/RN label
         for (index, component) in components.enumerated() {
             if component.contains("SN/RN") || component.contains("SN") || component.contains("RN") {
                 let nextIndex = index + 1
@@ -129,7 +129,7 @@ class TagScannerViewModel: NSObject, ObservableObject {
                         .replacingOccurrences(of: "RN", with: "")
                         .trimmingCharacters(in: CharacterSet(charactersIn: ":/- "))
                     
-                    if potentialStyle.count == 6 && potentialStyle.allSatisfy({ $0.isNumber }) {
+                    if (potentialStyle.count == 5 || potentialStyle.count == 6) && potentialStyle.allSatisfy({ $0.isNumber }) {
                         foundStyle = potentialStyle
                     }
                 }
@@ -153,13 +153,49 @@ class TagScannerViewModel: NSObject, ObservableObject {
             }
         }
         
-        // Fallback: Find style with regex
-        let stylePattern = "\\b\\d{6}\\b"
-        if foundStyle == nil, let regex = try? NSRegularExpression(pattern: stylePattern) {
-            let range = NSRange(uppercased.startIndex..., in: uppercased)
-            if let match = regex.firstMatch(in: uppercased, range: range) {
-                if let matchRange = Range(match.range, in: uppercased) {
-                    foundStyle = String(uppercased[matchRange])
+        // Fallback: Find any 5-6 consecutive digits (smart filtering)
+        if foundStyle == nil {
+            // Try 6 digits first
+            let sixDigitPattern = "\\b\\d{6}\\b"
+            if let regex = try? NSRegularExpression(pattern: sixDigitPattern) {
+                let range = NSRange(uppercased.startIndex..., in: uppercased)
+                let matches = regex.matches(in: uppercased, range: range)
+                
+                // Filter out obvious garbage (like dates, prices, etc.)
+                for match in matches {
+                    if let matchRange = Range(match.range, in: uppercased) {
+                        let candidate = String(uppercased[matchRange])
+                        // Avoid obvious dates (starts with 19, 20, 21) and repeated digits
+                        if !candidate.hasPrefix("19") && !candidate.hasPrefix("20") && !candidate.hasPrefix("21") {
+                            let uniqueDigits = Set(candidate)
+                            // Avoid all same digit (like 111111, 000000)
+                            if uniqueDigits.count > 1 {
+                                foundStyle = candidate
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // If no 6-digit found, try 5 digits
+            if foundStyle == nil {
+                let fiveDigitPattern = "\\b\\d{5}\\b"
+                if let regex = try? NSRegularExpression(pattern: fiveDigitPattern) {
+                    let range = NSRange(uppercased.startIndex..., in: uppercased)
+                    let matches = regex.matches(in: uppercased, range: range)
+                    
+                    for match in matches {
+                        if let matchRange = Range(match.range, in: uppercased) {
+                            let candidate = String(uppercased[matchRange])
+                            let uniqueDigits = Set(candidate)
+                            // Avoid all same digit
+                            if uniqueDigits.count > 1 {
+                                foundStyle = candidate
+                                break
+                            }
+                        }
+                    }
                 }
             }
         }
