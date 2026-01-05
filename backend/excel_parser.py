@@ -3,7 +3,7 @@ import re
 import os
 from typing import Dict, List, Optional
 from sqlalchemy.exc import SQLAlchemyError
-from backend.database import Item, StyleSummary, get_session
+from database import Item, StyleSummary, get_session
 import openpyxl
 from PIL import Image
 import io

@@ -81,7 +81,7 @@ struct BatchTagScanView: View {
                                         Button(action: addScannedItem) {
                                             Image(systemName: "plus.circle.fill")
                                                 .font(.system(size: 40))
-                                                .foregroundColor(.green)
+                                                .foregroundColor(.white)
                                         }
                                     }
                                     .padding()
@@ -120,7 +120,7 @@ struct BatchTagScanView: View {
                                         .foregroundColor(.white)
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 6)
-                                        .background(Color.green)
+                                        .background(Color.black)
                                         .cornerRadius(20)
                                 }
                                 .padding()
@@ -191,7 +191,7 @@ struct BatchTagScanView: View {
                                                 showingEditSheet = true
                                             }) {
                                                 Image(systemName: "pencil.circle.fill")
-                                                    .foregroundColor(.blue)
+                                                    .foregroundColor(Color(.darkGray))
                                                     .font(.title3)
                                             }
                                         }
@@ -207,7 +207,7 @@ struct BatchTagScanView: View {
                                         }
                                         .frame(maxWidth: .infinity)
                                         .padding()
-                                        .background(Color.blue)
+                                        .background(Color.black)
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
                                     }
@@ -225,7 +225,7 @@ struct BatchTagScanView: View {
                                         }
                                         .frame(maxWidth: .infinity)
                                         .padding()
-                                        .background(Color.green)
+                                        .background(Color(.darkGray))
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
                                     }

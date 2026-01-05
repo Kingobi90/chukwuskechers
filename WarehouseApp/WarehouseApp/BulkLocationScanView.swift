@@ -130,7 +130,7 @@ struct BulkLocationScanView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(selectedRowId != nil ? Color.blue : Color.gray)
+                        .background(selectedRowId != nil ? Color.black : Color(.systemGray))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                     }
@@ -437,7 +437,7 @@ struct BulkScannerView: View {
                                     }) {
                                         Image(systemName: "checkmark.circle.fill")
                                             .font(.system(size: 40))
-                                            .foregroundColor(.green)
+                                            .foregroundColor(.white)
                                     }
                                 }
                                 
@@ -464,7 +464,7 @@ struct BulkScannerView: View {
                                                             .fontWeight(.semibold)
                                                             .padding(.horizontal, 12)
                                                             .padding(.vertical, 6)
-                                                            .background((selectedColor ?? scanner.extractedColor) == color ? Color.blue : Color.white.opacity(0.3))
+                                                            .background((selectedColor ?? scanner.extractedColor) == color ? Color.black : Color.white.opacity(0.3))
                                                             .foregroundColor(.white)
                                                             .cornerRadius(8)
                                                     }

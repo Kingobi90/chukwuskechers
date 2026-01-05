@@ -1,7 +1,7 @@
 """Seasonal drop management - mark styles not in seasonal sheet as dropped."""
 from typing import Dict, List
-from backend.excel_parser import InventoryParser
-from backend.database import get_session, Item
+from excel_parser import InventoryParser
+from database import get_session, Item
 
 
 def process_seasonal_drop(excel_file_path: str, season_name: str) -> Dict:

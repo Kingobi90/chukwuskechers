@@ -18,16 +18,16 @@ import json
 from typing import Dict
 from queue import Queue
 
-from backend.database import get_db, Item, StyleSummary, InventoryAction, FileUpload, Room, Shelf, Row
-from backend.schemas import (
+from database import get_db, Item, StyleSummary, InventoryAction, FileUpload, Room, Shelf, Row
+from schemas import (
     MessageResponse, HealthResponse, StyleResponse, ColorVariant,
     ActionRequest, ActionResponse, ActionHistoryItem, UploadResponse,
     StatsResponse, FileInfo, ItemResponse, PaginatedResponse, parse_width
 )
-from backend.excel_parser import InventoryParser
-from backend.analytics_routes import router as analytics_router
-from backend.seasonal_drop import process_seasonal_drop, export_dropped_items_report
-from backend.barcode_scanner import process_camera_frame, decode_barcode_from_image
+from excel_parser import InventoryParser
+from analytics_routes import router as analytics_router
+from seasonal_drop import process_seasonal_drop, export_dropped_items_report
+# from barcode_scanner import process_camera_frame, decode_barcode_from_image
 from pydantic import BaseModel
 
 
@@ -60,7 +60,7 @@ def get_image_url_for_item(style: str, color: str) -> Optional[str]:
     # Image filenames now include width variants: stylenumber_color.jpg
     # e.g., "104437_BBK (w).jpg" for wide width
     image_filename = f"{style}_{color}.jpg"
-    image_path = os.path.join("static", "images", image_filename)
+    image_path = os.path.join("..", "static", "images", image_filename)
 
     # Check if image file exists
     if os.path.exists(image_path):
@@ -71,18 +71,18 @@ def get_image_url_for_item(style: str, color: str) -> Optional[str]:
 @app.get("/ui")
 async def serve_ui():
     """Serve the new SMAC web UI."""
-    return FileResponse("static/index.html")
+    return FileResponse("../static/index.html")
 
 
 @app.get("/")
 async def root():
     """Serve the new SMAC warehouse management UI."""
-    return FileResponse("static/index.html")
+    return FileResponse("../static/index.html")
 
 @app.get("/warehouse")
 async def serve_old_warehouse():
     """Serve the old warehouse management UI."""
-    return FileResponse("static/warehouse.html")
+    return FileResponse("../static/warehouse.html")
 
 
 @app.get("/api", response_model=MessageResponse)
@@ -1148,35 +1148,36 @@ async def update_item_location(item_id: str, location_update: ItemLocationUpdate
     }
 
 
-@app.post("/scan-barcode")
-async def scan_barcode(file: UploadFile = File(...)):
-    """
-    Scan barcode/QR code from uploaded image and extract style number.
-    Returns decoded barcode data and automatically searches for matching items.
-    """
-    try:
-        # Read image data
-        image_data = await file.read()
-        
-        # Process barcode
-        result = process_camera_frame(image_data)
-        
-        if not result['success']:
-            return {
-                "success": False,
-                "message": result['message'],
-                "barcodes": []
-            }
-        
-        # Return barcode results
-        return {
-            "success": True,
-            "message": result['message'],
-            "barcodes": result['barcodes']
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Barcode scanning failed: {str(e)}")
+# Barcode scanner endpoint disabled - requires zbar system library
+# @app.post("/scan-barcode")
+# async def scan_barcode(file: UploadFile = File(...)):
+#     """
+#     Scan barcode/QR code from uploaded image and extract style number.
+#     Returns decoded barcode data and automatically searches for matching items.
+#     """
+#     try:
+#         # Read image data
+#         image_data = await file.read()
+#         
+#         # Process barcode
+#         result = process_camera_frame(image_data)
+#         
+#         if not result['success']:
+#             return {
+#                 "success": False,
+#                 "message": result['message'],
+#                 "barcodes": []
+#             }
+#         
+#         # Return barcode results
+#         return {
+#             "success": True,
+#             "message": result['message'],
+#             "barcodes": result['barcodes']
+#         }
+#         
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Barcode scanning failed: {str(e)}")
 
 
 @app.post("/scan-tag")
@@ -1487,7 +1488,7 @@ async def export_dropped_items(db: Session = Depends(get_db)):
 
 
 # Mount static files at the end (after all routes are defined)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="../static"), name="static")
 
 
 if __name__ == "__main__":

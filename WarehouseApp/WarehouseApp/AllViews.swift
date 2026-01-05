@@ -1317,17 +1317,26 @@ struct SearchItemRow: View {
                         .foregroundColor(statusColor(status))
                         .cornerRadius(4)
                 }
+                if let location = item.location {
+                    HStack(spacing: 4) {
+                        Image(systemName: "location.fill")
+                            .font(.caption2)
+                        Text("\(location.room) > \(location.shelf) > \(location.row)")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.green)
+                }
             }
             
             Spacer()
             
             Button(action: onAssign) {
-                Text("Assign")
+                Text(item.status?.lowercased() == "placed" ? "View" : "Assign")
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(Color.blue)
+                    .background(item.status?.lowercased() == "placed" ? Color.green : Color.black)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
@@ -1359,6 +1368,10 @@ struct AssignLocationSheet: View {
     @State private var errorMessage: String?
     @State private var successMessage: String?
     
+    var isPlaced: Bool {
+        item.status?.lowercased() == "placed" && item.location != nil
+    }
+    
     var body: some View {
         NavigationView {
             Form {
@@ -1375,9 +1388,44 @@ struct AssignLocationSheet: View {
                         Text(item.colorCode)
                             .foregroundColor(.secondary)
                     }
+                    HStack {
+                        Text("Status")
+                        Spacer()
+                        Text(item.status?.capitalized ?? "Unknown")
+                            .foregroundColor(item.status?.lowercased() == "placed" ? .green : .orange)
+                            .fontWeight(.semibold)
+                    }
                 }
                 
-                Section(header: Text("Select Location")) {
+                if isPlaced, let location = item.location {
+                    Section(header: Text("Current Location")) {
+                        HStack {
+                            Image(systemName: "building.2.fill")
+                                .foregroundColor(.green)
+                            Text("Room")
+                            Spacer()
+                            Text(location.room)
+                                .foregroundColor(.secondary)
+                        }
+                        HStack {
+                            Image(systemName: "square.stack.3d.up.fill")
+                                .foregroundColor(.green)
+                            Text("Shelf")
+                            Spacer()
+                            Text(location.shelf)
+                                .foregroundColor(.secondary)
+                        }
+                        HStack {
+                            Image(systemName: "square.grid.3x3.fill")
+                                .foregroundColor(.green)
+                            Text("Row")
+                            Spacer()
+                            Text(location.row)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                } else {
+                    Section(header: Text("Select Location")) {
                     Picker("Room", selection: $selectedRoomId) {
                         Text("Select Room").tag(nil as Int?)
                         ForEach(rooms) { room in
@@ -1406,39 +1454,40 @@ struct AssignLocationSheet: View {
                         }
                     }
                     .disabled(selectedShelfId == nil)
-                }
-                
-                if let error = errorMessage {
-                    Section {
-                        Text(error)
-                            .foregroundColor(.red)
                     }
-                }
-                
-                if let success = successMessage {
-                    Section {
-                        Text(success)
-                            .foregroundColor(.green)
-                    }
-                }
-                
-                Section {
-                    Button(action: assignLocation) {
-                        HStack {
-                            Spacer()
-                            if isLoading {
-                                ProgressView()
-                            } else {
-                                Text("Assign to Location")
-                                    .fontWeight(.semibold)
-                            }
-                            Spacer()
+                    
+                    if let error = errorMessage {
+                        Section {
+                            Text(error)
+                                .foregroundColor(.red)
                         }
                     }
-                    .disabled(selectedRowId == nil || isLoading)
+                    
+                    if let success = successMessage {
+                        Section {
+                            Text(success)
+                                .foregroundColor(.green)
+                        }
+                    }
+                    
+                    Section {
+                        Button(action: assignLocation) {
+                            HStack {
+                                Spacer()
+                                if isLoading {
+                                    ProgressView()
+                                } else {
+                                    Text("Assign to Location")
+                                        .fontWeight(.semibold)
+                                }
+                                Spacer()
+                            }
+                        }
+                        .disabled(selectedRowId == nil || isLoading)
+                    }
                 }
             }
-            .navigationTitle("Assign Location")
+            .navigationTitle(isPlaced ? "Item Location" : "Assign Location")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

@@ -439,6 +439,99 @@
             font-style: italic;
         }
 
+        .shelf-carousel-container {
+            position: relative;
+            padding: 0 50px;
+        }
+
+        .shelf-carousel {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .shelf-carousel-track {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+
+        .shelf-carousel-item {
+            min-width: 100%;
+            flex-shrink: 0;
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .carousel-arrow:hover {
+            background: linear-gradient(135deg, #5a5a5a 0%, #3c3c3c 100%);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .carousel-arrow.left {
+            left: 5px;
+        }
+
+        .carousel-arrow.right {
+            right: 5px;
+        }
+
+        .shelf-indicator {
+            text-align: center;
+            padding: 10px;
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .load-more-rows {
+            text-align: center;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .load-more-rows button {
+            background: linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .load-more-rows button:hover {
+            background: linear-gradient(135deg, #5a5a5a 0%, #3c3c3c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
         /* Item Profile Modal */
         .modal {
             display: none;
@@ -535,7 +628,6 @@
         @keyframes slideUp {
             from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
-        }
         }
 
         .loading {
@@ -805,8 +897,8 @@
             <div id="visual-shelves-tab" class="tab-content">
                 <div class="card">
                     <h3>Visual Warehouse Layout</h3>
-                    <p>View your warehouse shelves with all placed items. Auto-refreshes every 30 seconds.</p>
-                    <button class="btn btn-secondary" onclick="loadVisualShelves()">Force Refresh</button>
+                    <p>View your warehouse shelves with all placed items. Click any item to see its profile.</p>
+                    <button class="btn btn-primary" onclick="loadVisualShelves()">Load Warehouse</button>
                 </div>
                 <div id="visual-warehouse-container"></div>
             </div>
@@ -1453,8 +1545,8 @@
         }
 
         async function searchItems() {
-            const style = document.getElementById('search-style').value;
-            const color = document.getElementById('search-color').value;
+            const style = document.getElementById('search-style').value.trim();
+            const color = document.getElementById('search-color').value.trim();
 
             if (!style && !color) {
                 alert('Please enter a style or color to search');
@@ -1468,15 +1560,21 @@
                 const params = new URLSearchParams();
                 if (style) params.append('style', style);
                 if (color) params.append('color', color);
+                
+                console.log('Searching with params:', params.toString());
 
                 const response = await fetch(`${API_BASE}/items/search?${params}`);
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
                 const items = await response.json();
                 
-                console.log('Search results:', items);
-                console.log('First item image_url:', items[0]?.image_url);
+                console.log('Search results:', items.length, 'items found');
 
                 if (items.length === 0) {
-                    resultsDiv.innerHTML = '<p>No items found</p>';
+                    resultsDiv.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">No items found matching your search criteria.</p>';
                     return;
                 }
 
@@ -1918,6 +2016,9 @@
 
             try {
                 const response = await fetch(`${API_BASE}/warehouse/visual-layout`);
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
                 const data = await response.json();
                 
                 if (!data.warehouse_layout || data.warehouse_layout.length === 0) {

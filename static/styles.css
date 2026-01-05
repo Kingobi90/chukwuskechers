@@ -723,7 +723,7 @@ body {
     border-radius: 50%;
     font-size: 32px;
     cursor: pointer;
-    z-index: 10;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -742,11 +742,13 @@ body {
 }
 
 .room-carousel-arrow.left {
-    left: 20px;
+    left: 10px;
+    top: 20%;
 }
 
 .room-carousel-arrow.right {
-    right: 20px;
+    right: 10px;
+    top: 20%;
 }
 
 .room-indicator {
@@ -791,7 +793,7 @@ body {
     border-radius: 50%;
     font-size: 28px;
     cursor: pointer;
-    z-index: 5;
+    z-index: 50;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -811,10 +813,12 @@ body {
 
 .carousel-arrow.left {
     left: 10px;
+    top: 50%;
 }
 
 .carousel-arrow.right {
     right: 10px;
+    top: 50%;
 }
 
 .shelf-indicator {
@@ -884,7 +888,7 @@ body {
     border-radius: 50%;
     font-size: 24px;
     cursor: pointer;
-    z-index: 3;
+    z-index: 30;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -903,11 +907,13 @@ body {
 }
 
 .row-carousel-arrow.left {
-    left: 5px;
+    left: 10px;
+    top: 80%;
 }
 
 .row-carousel-arrow.right {
-    right: 5px;
+    right: 10px;
+    top: 80%;
 }
 
 .row-indicator {

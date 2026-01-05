@@ -56,90 +56,55 @@ struct HomeView: View {
                     }
                     .padding(.top)
                     
-                    VStack(spacing: 16) {
-                        HomeSectionCard(
-                            title: "Find",
-                            icon: "magnifyingglass.circle.fill",
-                            color: .black
-                        ) {
-                            VStack(spacing: 12) {
-                                Button(action: {
-                                    showingSearch = true
-                                }) {
-                                    HStack {
-                                        Image(systemName: "magnifyingglass")
-                                            .foregroundColor(.secondary)
-                                        Text("Search items...")
-                                            .foregroundColor(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                    }
-                                    .padding(12)
-                                    .background(Color(.systemGray6))
-                                    .cornerRadius(10)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                                
-                                HStack(spacing: 12) {
-                                    CompactButton(
-                                        title: "Visual Shelves",
-                                        icon: "square.grid.3x3",
-                                        color: .black,
-                                        action: { showingVisualShelves = true }
-                                    )
-                                    
-                                    CompactButton(
-                                        title: "Locations",
-                                        icon: "building.2",
-                                        color: Color(.darkGray),
-                                        action: { showingLocations = true }
-                                    )
-                                }
-                            }
-                        }
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                        HomeButton(
+                            title: "Search",
+                            icon: "magnifyingglass",
+                            color: .black,
+                            action: { showingSearch = true }
+                        )
                         
-                        HomeSectionCard(
-                            title: "Operations",
-                            icon: "calendar.circle.fill",
-                            color: Color(.darkGray)
-                        ) {
-                            VStack(spacing: 12) {
-                                CompactButton(
-                                    title: "Bulk Location Scan",
-                                    icon: "qrcode.viewfinder",
-                                    color: .black,
-                                    action: { showingBulkScan = true }
-                                )
-                                
-                                CompactButton(
-                                    title: "Seasonal Drops",
-                                    icon: "calendar.badge.exclamationmark",
-                                    color: Color(.darkGray),
-                                    action: { showingSeasonalDrop = true }
-                                )
-                            }
-                        }
+                        HomeButton(
+                            title: "Visual Shelves",
+                            icon: "square.grid.3x3",
+                            color: Color(.darkGray),
+                            action: { showingVisualShelves = true }
+                        )
                         
-                        HomeSectionCard(
-                            title: "Insights",
-                            icon: "chart.bar.xaxis.circle.fill",
-                            color: Color(.systemGray)
-                        ) {
-                            HStack(spacing: 12) {
-                                CompactButton(
-                                    title: "Analytics",
-                                    icon: "chart.line.uptrend.xyaxis",
-                                    color: .black,
-                                    action: { showingAnalytics = true }
-                                )
-                                
-                                CompactButton(
-                                    title: "Statistics",
-                                    icon: "chart.bar",
-                                    color: Color(.darkGray),
-                                    action: { showingStatistics = true }
-                                )
-                            }
-                        }
+                        HomeButton(
+                            title: "Locations",
+                            icon: "building.2",
+                            color: Color(.systemGray),
+                            action: { showingLocations = true }
+                        )
+                        
+                        HomeButton(
+                            title: "Bulk Scan",
+                            icon: "qrcode.viewfinder",
+                            color: .black,
+                            action: { showingBulkScan = true }
+                        )
+                        
+                        HomeButton(
+                            title: "Seasonal Drops",
+                            icon: "calendar.badge.exclamationmark",
+                            color: Color(.darkGray),
+                            action: { showingSeasonalDrop = true }
+                        )
+                        
+                        HomeButton(
+                            title: "Analytics",
+                            icon: "chart.line.uptrend.xyaxis",
+                            color: Color(.systemGray),
+                            action: { showingAnalytics = true }
+                        )
+                        
+                        HomeButton(
+                            title: "Statistics",
+                            icon: "chart.bar",
+                            color: .black,
+                            action: { showingStatistics = true }
+                        )
                     }
                     .padding(.horizontal)
                 }
@@ -245,7 +210,7 @@ struct HomeButton: View {
         Button(action: action) {
             VStack(spacing: 12) {
                 Image(systemName: icon)
-                    .font(.system(size: 40))
+                    .font(.system(size: 36))
                     .foregroundColor(.white)
                 
                 Text(title)
@@ -253,18 +218,13 @@ struct HomeButton: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
+                    .lineLimit(2)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 140)
-            .background(
-                LinearGradient(
-                    colors: [color, color.opacity(0.7)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .cornerRadius(16)
-            .shadow(color: color.opacity(0.3), radius: 8, x: 0, y: 4)
+            .background(color)
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
         }
     }
 }
@@ -329,7 +289,7 @@ struct WorkflowView: View {
                             title: "Batch Tag Scanner",
                             description: "Scan multiple tags and export to CSV",
                             icon: "barcode.viewfinder",
-                            color: .green,
+                            color: Color(.darkGray),
                             action: { showingBatchTagScan = true }
                         )
                     }

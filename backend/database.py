@@ -151,7 +151,7 @@ class FileUpload(Base):
 
 def get_engine():
     """Get database engine based on DATABASE_URL environment variable."""
-    database_url = os.getenv('DATABASE_URL', 'sqlite:///chukwu_inventory.db')
+    database_url = os.getenv('DATABASE_URL', 'sqlite:///../chukwu_inventory.db')
     
     if database_url.startswith('postgres://'):
         database_url = database_url.replace('postgres://', 'postgresql://', 1)
