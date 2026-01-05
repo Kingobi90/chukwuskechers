@@ -17,47 +17,51 @@ class TagScannerViewModel: NSObject, ObservableObject {
     private let processingInterval: TimeInterval = 0.5
     
     private let validColors = [
-        // Black variants
-        "BLK", "BBK", "BKMT", "BKCC", "BKBL", "BKGD", "BKGY", "BKGN", "BKOR", "BKPK", "BKPR", "BKRD", "BKSL", "BKWT", "BKW",
-        // White variants
-        "WHT", "OFWT", "WBK", "WBL", "WCC", "WGD", "WGN", "WGY", "WMT", "WMLT", "WNV", "WOR", "WPK", "WPR", "WRD", "WSL", "WTP", "WBUG",
-        // Navy variants
-        "NVY", "NVBL", "NVBK", "NVCC", "NVGY", "NVGN", "NVMT", "NVOR", "NVPK", "NVRD", "NVWT",
-        // Gray variants
-        "GRY", "GRAY", "GYBL", "GYBK", "GYMT", "GYOR", "GYPK", "GYRD", "GYWT",
-        // Charcoal variants
-        "CHAR", "CC", "CCBK", "CCBL", "CCLV", "CCOR", "CCPK",
-        // Blue variants
-        "BLU", "LTBL", "DKBL", "BLMT", "BLPK", "BLRD", "BLWT", "BLGY", "BLOR",
-        // Red variants
-        "RED", "RDBK", "RDBR", "RDGY", "RDMT", "RDPK", "RDWT",
-        // Pink variants
-        "PINK", "PNK", "LTPK", "PKMT", "PKWT", "PKBL", "PKPR",
-        // Purple variants
-        "PRPL", "PRP", "PRCL", "PRMT", "PRPK", "PRWT",
-        // Green variants
-        "GRN", "LTGN", "DKGN", "GNMT", "GNWT", "GNBL",
-        // Olive variants
-        "OLV", "OLVG",
-        // Brown variants
-        "BRN", "DKBR", "LTBR", "CDB", "BRMT", "BRWT",
-        // Beige/Tan/Natural variants
-        "BGE", "TAN", "TPE", "TAUP", "DKTP", "LTTN", "SAND", "KHAK", "KHK", "NAT", "NTMT", "NTTN",
-        // Orange variants
-        "ORG", "ORNG", "ORMT", "ORWT", "ORBL", "CRL",
-        // Yellow variants
-        "YLW", "YLLW", "YLMT", "YLWT",
-        // Multi/Pattern variants
-        "MULT", "MLTI", "CAMO", "PRNT", "FLRL",
-        // Metallic variants
-        "SLV", "SLVR", "GLD", "GOLD", "RSGD", "BRNZ",
-        // Stone/Slate variants
-        "STN", "SLTP", "SLAT",
-        // Other colors
-        "MVE", "MAUV", "LAV", "LVND", "MINT", "TEAL", "TRQ",
-        "COC", "COCO", "WINE", "BUG", "BURG", "PLUM", "PEACH", "LMGN", "LIME",
-        // Additional common codes
-        "DKGY", "LTGY", "NVGY", "CHRC", "NVCC"
+        "ACDB", "AQMT", "AQPK", "AQPR", "AQUA", "B", "BBK", "BBLM", "BBLP", "BBOR", "BCBL", "BCCL", "BCOR", "BCYL",
+        "BGE", "BGOR", "BGRD", "BKAQ", "BKBL", "BKBR", "BKBU", "BKCC", "BKCL", "BKFS", "BKGD", "BKGM", "BKGR", "BKGY",
+        "BKHP", "BKLB", "BKLD", "BKLG", "BKLM", "BKLP", "BKLV", "BKMN", "BKMT", "BKMV", "BKNT", "BKNV", "BKOL", "BKOR",
+        "BKPK", "BKPR", "BKPW", "BKRB", "BKRD", "BKRG", "BKRY", "BKS", "BKSL", "BKSR", "BKTL", "BKTN", "BKTP", "BKTQ",
+        "BKW", "BKWP", "BKWR", "BKYB", "BKYL", "BKYO", "BLAQ", "BLBK", "BLCL", "BLGR", "BLGY", "BLK", "BLLB", "BLLM",
+        "BLMN", "BLMT", "BLNV", "BLOR", "BLPK", "BLPR", "BLRD", "BLSH", "BLSL", "BLTQ", "BLU", "BLW", "BLYL", "BMLT",
+        "BOL", "BPPK", "BPT", "BRBK", "BRBL", "BRCK", "BRCT", "BRGR", "BRLM", "BRMT", "BRN", "BRNT", "BROL", "BROR",
+        "BRPK", "BRRD", "BRS", "BRTN", "BRTP", "BRW", "BRZ", "BSGD", "BUBK", "BUGD", "BUGY", "BUMT", "BUR", "BURG",
+        "CAMO", "CBLM", "CCAQ", "CCBK", "CCBL", "CCBU", "CCGD", "CCGR", "CCGY", "CCL", "CCLB", "CCLG", "CCLM", "CCLV",
+        "CCMT", "CCNV", "CCOR", "CCPK", "CCPR", "CCRD", "CCSL", "CCTL", "CCTQ", "CCYL", "CDB", "CHAR", "CHBK", "CHBR",
+        "CHBZ", "CHMP", "CHMT", "CHOC", "CHOR", "CHSD", "CHT", "CHTN", "CHTP", "CINN", "CLAY", "CLR", "CML", "CMNT",
+        "COC", "COFF", "COG", "COPP", "CRL", "CRML", "CRMT", "CSMT", "CSNT", "CYT", "DBRN", "DCHN", "DEN", "DKBR",
+        "DKCC", "DKGR", "DKGY", "DKMV", "DKNT", "DKNV", "DKPR", "DKRD", "DKRS", "DKTP", "DSCH", "DSRT", "EMRD", "FUD",
+        "FUS", "GDMT", "GDPK", "GDSL", "GIR", "GLD", "GMLT", "GNBK", "GRBK", "GRMT", "GRN", "GRNV", "GROR", "GRPK",
+        "GRW", "GRY", "GRYL", "GUBK", "GUN", "GURD", "GYAQ", "GYBK", "GYBL", "GYBR", "GYBU", "GYCC", "GYCL", "GYGR",
+        "GYLB", "GYLM", "GYLP", "GYLV", "GYMN", "GYMT", "GYMV", "GYNV", "GYOL", "GYOR", "GYPK", "GYPR", "GYRD", "GYS",
+        "GYSL", "GYTQ", "GYW", "GYYL", "HPAQ", "HPBK", "HPBL", "HPGD", "HPK", "HPLV", "HPMT", "HPNV", "HPSL", "HPTQ",
+        "HTPK", "KHK", "LAV", "LBGY", "LBLV", "LBLW", "LBMT", "LBNV", "LBPK", "LBSL", "LGAQ", "LGBK", "LGBL", "LGCC",
+        "LGLB", "LGLM", "LGLV", "LGMT", "LGNV", "LGPK", "LGPR", "LGY", "LIL", "LIME", "LMBK", "LMBL", "LMCC", "LMGN",
+        "LMLV", "LMMT", "LPCC", "LPD", "LPHP", "LPK", "LPMT", "LPRG", "LTBL", "LTBR", "LTDN", "LTGD", "LTGR", "LTGY",
+        "LTMV", "LTPK", "LTPL", "LTTN", "LUG", "LVAQ", "LVHP", "LVLP", "LVMT", "LVNP", "LVPK", "LVTQ", "MAG", "MAPL",
+        "MLT", "MNT", "MOC", "MTMT", "MULT", "MUSH", "MUST", "MVE", "MVGY", "MVMT", "MVNT", "MVPR", "MVTQ", "NAT",
+        "NBLM", "NLMT", "NMLT", "NPMT", "NPNK", "NTAQ", "NTBG", "NTBK", "NTBL", "NTBR", "NTCL", "NTGD", "NTGR", "NTGY",
+        "NTLB", "NTLP", "NTMT", "NTNV", "NTOL", "NTOR", "NTPH", "NTPK", "NTPR", "NTRD", "NTSL", "NTTN", "NTTP", "NTW",
+        "NTYL", "NUDE", "NVAQ", "NVBK", "NVBL", "NVBR", "NVBU", "NVCC", "NVCL", "NVGD", "NVGW", "NVGY", "NVHP", "NVLB",
+        "NVLM", "NVLV", "NVMT", "NVNT", "NVOR", "NVPK", "NVPR", "NVPW", "NVRD", "NVSL", "NVTL", "NVTN", "NVTQ", "NVW",
+        "NVY", "NVYL", "NWLB", "OFNV", "OFNY", "OFPK", "OFWM", "OFWR", "OFWT", "OLBK", "OLBR", "OLGY", "OLLM", "OLMT",
+        "OLNT", "OLOR", "OLPK", "OLV", "ORBK", "ORBL", "ORCC", "ORG", "ORMT", "ORNV", "ORYL", "OWBL", "OWBR", "OWGN",
+        "OWGR", "OWHT", "PBBK", "PBL", "PCH", "PERI", "PEW", "PINK", "PKBK", "PKBL", "PKCL", "PKGR", "PKGY", "PKHP",
+        "PKLB", "PKLM", "PKLP", "PKLV", "PKMT", "PKNV", "PKRD", "PKSL", "PKTN", "PKTQ", "PLUM", "PMLT", "PNK", "PRAQ",
+        "PRBK", "PRBL", "PRCL", "PRGR", "PRLB", "PRLV", "PRMT", "PROR", "PRPK", "PRTQ", "PRYL", "PUR", "PWAQ", "PWMT",
+        "QUAL", "RAS", "RDBK", "RDBL", "RDBR", "RDCC", "RDGY", "RDMT", "RDNV", "RDOR", "RDPK", "RDPR", "RDS", "RDW",
+        "RDYL", "RED", "ROS", "RSGD", "RST", "RUST", "RYBK", "RYBL", "RYL", "RYMT", "RYOR", "RYYL", "SAGE", "SAND",
+        "SDNT", "SFM", "SIL", "SLAQ", "SLBK", "SLBL", "SLGD", "SLGY", "SLLP", "SLLV", "SLNV", "SLOR", "SLPK", "SLPR",
+        "SLR", "SLRY", "SLT", "SLTP", "SLW", "SMLT", "SND", "SNK", "STN", "STNV", "STOL", "TAN", "TEAL", "TLBK", "TLBL",
+        "TLMT", "TLNV", "TNBK", "TNBR", "TNCC", "TNTP", "TPBG", "TPBK", "TPBL", "TPBR", "TPCH", "TPCL", "TPE", "TPGD",
+        "TPHP", "TPLM", "TPLV", "TPMT", "TPNT", "TPNV", "TPOR", "TPPC", "TPPK", "TPSL", "TPYL", "TQBK", "TQCR", "TQGY",
+        "TQLM", "TQLV", "TQMT", "TURQ", "VIL", "W", "WAQ", "WBGY", "WBK", "WBKB", "WBKR", "WBKS", "WBL", "WBLK", "WBLM",
+        "WBLP", "WBLR", "WBLU", "WBMT", "WBO", "WBPK", "WBPR", "WBR", "WBRD", "WBRN", "WBSL", "WBTQ", "WBUG", "WCC",
+        "WCCL", "WCLV", "WCRL", "WFUS", "WGD", "WGR", "WGRD", "WGRN", "WGY", "WHLD", "WHP", "WHPK", "WHT", "WINE", "WLB",
+        "WLBL", "WLBP", "WLBY", "WLGY", "WLM", "WLPK", "WLPR", "WLV", "WLVB", "WLVM", "WMLT", "WMN", "WMNT", "WMT",
+        "WNLB", "WNT", "WNV", "WNVB", "WNVL", "WNVP", "WNVR", "WOR", "WPK", "WPKB", "WPKL", "WPLB", "WPNK", "WPR",
+        "WPRP", "WPTQ", "WPUR", "WPW", "WRD", "WRDB", "WROS", "WRPK", "WRSL", "WSBK", "WSBL", "WSK", "WSL", "WSLB",
+        "WSLG", "WSLP", "WSPK", "WSRD", "WTBK", "WTG", "WTGD", "WTN", "WTNT", "WTP", "WTPK", "WTQ", "WTQP", "WTRG",
+        "WWHT", "WYL", "YEL", "YLBK", "YLBL", "YLLM", "YLMT", "YLNV", "YLW", "ZBA"
     ]
     
     override init() {
